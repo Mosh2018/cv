@@ -28,6 +28,7 @@ public class User extends ChangeTime {
     private Long id;
 
     @NotBlank
+    @Column(name = "username")
     private String username;
 
     @NotBlank
@@ -42,10 +43,9 @@ public class User extends ChangeTime {
     @NotBlank
     private String password;
 
-    @ManyToMany
-    @JoinTable(name = "roles_users",
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-
 }

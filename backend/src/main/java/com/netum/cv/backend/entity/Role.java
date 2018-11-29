@@ -1,6 +1,6 @@
 package com.netum.cv.backend.entity;
 
-import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "roles")
 @Setter
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
 public class Role {
 
@@ -18,10 +18,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Enumerated(EnumType.STRING)
     @NaturalId
-    @Column
-    private RoleName name;
+    @Column(name = "role_name")
+    private RoleName roleName;
 
 }
