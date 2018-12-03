@@ -1,5 +1,6 @@
 package com.netum.cv.backend.controller;
 
+import com.netum.cv.backend.modal.CustomResponse;
 import com.netum.cv.backend.modal.RequestUser;
 import com.netum.cv.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
-public class UserLoginController {
+public class UserLoginController extends AppController{
 
 
     @Autowired
@@ -24,9 +25,8 @@ public class UserLoginController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity userSignUp(@RequestBody RequestUser requestUser){
-        ResponseEntity result = userService.saveUser(requestUser);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<CustomResponse> userSignUp(@RequestBody RequestUser requestUser){
+        return getEntityResponseAnswer(userService.saveUser(requestUser));
     }
 
     @PostMapping("/userLogin")
