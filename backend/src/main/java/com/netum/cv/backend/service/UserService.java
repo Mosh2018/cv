@@ -31,7 +31,7 @@ public class UserService {
     @Autowired
     private UserValidation userValidation;
 
-    public User getUserInformations(String userName) {
+    public User getUserInformation(String userName) {
         return userRepository.findByUsername(userName).get();
     }
 

@@ -19,9 +19,9 @@ public class UserLoginController extends AppController{
     private UserService userService;
 
     @GetMapping("/getUser/{username}")
-    public ResponseEntity<?> getUserInformations(@Valid @PathVariable String username) {
+    public ResponseEntity<?> getUserInformation(@Valid @PathVariable String username) {
 
-        return ResponseEntity.ok(userService.getUserInformations(username));
+        return ResponseEntity.ok(userService.getUserInformation(username));
     }
 
     @PostMapping("/sign-up")

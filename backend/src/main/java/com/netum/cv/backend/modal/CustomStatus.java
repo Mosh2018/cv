@@ -10,7 +10,10 @@ public enum CustomStatus {
     PASS_VALIDATION(""),
     SHORT_STRING("This value is too short valid string more than 1 character"),
     IT_IS_NOT_UNIQUE("The value it is not unique change the value"),
-    LONG_STRING("This value is so long valid string less than 20 characters");
+    LONG_STRING("This value is so long valid string less than 20 characters"),
+    EMPTY("Value can not be empty"),
+    IT_IS_WEAK("Can not validate it"),
+    BAD_EMAIL("This Email address is not valid");
 
     private final String name;
 
