@@ -27,14 +27,13 @@ public class AppController {
             case SHORT_STRING:
             case LONG_STRING:
                 return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.LENGTH_REQUIRED);
-
+            case EMPTY:
+                return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.NO_CONTENT);
+            case IT_IS_WEAK:
+            case BAD_EMAIL:
+                return  new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.SEE_OTHER);
+                default:
+                    return getEntityResponseAnswer(CustomResponse.build(exception.status));
         }
-
-        if (exception.status.equals(IT_IS_NOT_UNIQUE)) {
-
-        }
-
-        return getEntityResponseAnswer(CustomResponse.build(exception.status));
     }
-
 }
