@@ -32,6 +32,8 @@ public class AppController {
             case IT_IS_WEAK:
             case BAD_EMAIL:
                 return  new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.SEE_OTHER);
+            case NOT_FOUND:
+                return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.FORBIDDEN);
                 default:
                     return getEntityResponseAnswer(CustomResponse.build(exception.status));
         }

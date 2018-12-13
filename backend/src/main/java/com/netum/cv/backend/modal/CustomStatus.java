@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum CustomStatus {
-    NOT_FOUND(""),
+    NOT_FOUND("User not found, can not find user for this username"),
     IT_IS_OK(""),
     NOT_VALID(""),
     PASS_VALIDATION(""),

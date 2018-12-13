@@ -7,7 +7,7 @@ import com.netum.cv.backend.modal.CustomResponse;
 import com.netum.cv.backend.modal.RequestUser;
 import com.netum.cv.backend.repositories.RoleRepository;
 import com.netum.cv.backend.repositories.UserRepository;
-import com.netum.cv.backend.validation.UserValidation;
+import com.netum.cv.backend.validation.SignUpUserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserValidation userValidation;
+    private SignUpUserValidation signUpUserValidation;
 
     public User getUserInformation(String userName) {
         return userRepository.findByUsername(userName).get();
@@ -37,7 +37,7 @@ public class UserService {
 
     public CustomResponse saveUser(RequestUser requestUser) {
 
-        CustomResponse result = userValidation.validateSignUp(requestUser);
+        CustomResponse result = signUpUserValidation.validateSignUp(requestUser);
 
         if (result.getCustomStatus() == PASS_VALIDATION) {
             User user = populateUser(requestUser);

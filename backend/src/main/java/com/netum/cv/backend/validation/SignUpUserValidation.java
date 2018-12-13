@@ -6,16 +6,13 @@ import com.netum.cv.backend.modal.RequestUser;
 import com.netum.cv.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.netum.cv.backend.modal.CustomStatus.*;
 import static com.netum.cv.backend.validation.AppSetting.*;
-import static com.netum.cv.backend.validation.UserValidationUtil.calculatePasswordStrength;
-import static com.netum.cv.backend.validation.UserValidationUtil.invalidEmail;
+import static com.netum.cv.backend.validation.UserValidationUtil.*;
 
 @Component
-public class UserValidation {
+public class SignUpUserValidation {
 
     @Autowired
     private UserRepository userRepository;
@@ -25,26 +22,10 @@ public class UserValidation {
         isValidUserName(user.getUsername());
         isValidPassword(user.getPassword());
         isValidEmail(user.getEmail());
-        isValidStringValue(user.getFirstName(), firstname_min.toInt(), firstname_max.toInt());
-        isValidStringValue(user.getLastName(), lastname_min.toInt(), lastname_max.toInt());
+        isValidStringValue(user.getFirstName(), first_name_min.toInt(), first_name_max.toInt());
+        isValidStringValue(user.getLastName(), last_name_min.toInt(), last_name_max.toInt());
 
         return CustomResponse.build(PASS_VALIDATION);
-    }
-
-
-    private void isValidStringValue(String value, int min, int max) {
-        if(value == null) {
-            throw new UserNotValidException(EMPTY);
-        }
-        if (min > 0 && value.isEmpty()) {
-            throw new UserNotValidException(EMPTY);
-        }
-        if (value.length() < min) {
-            throw new UserNotValidException(SHORT_STRING);
-        }
-        if (value.length() > max) {
-            throw new UserNotValidException(LONG_STRING);
-        }
     }
 
     private void isValidUserName(String username) {

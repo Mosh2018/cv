@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class TestBase {
 
     @InjectMocks
-    protected UserValidation userValidation;
+    protected SignUpUserValidation signUpUserValidation;
 
     @Mock
     protected UserRepository userRepository;

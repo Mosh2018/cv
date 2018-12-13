@@ -1,11 +1,14 @@
 package com.netum.cv.backend.controller;
 
 import com.netum.cv.backend.modal.CustomResponse;
+import com.netum.cv.backend.modal.LoginUser;
 import com.netum.cv.backend.modal.RequestUser;
+import com.netum.cv.backend.service.JwtTokenService;
 import com.netum.cv.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -14,6 +17,8 @@ import javax.validation.Valid;
 @RequestMapping("/api/auth")
 public class UserLoginController extends AppController{
 
+    @Autowired
+    private JwtTokenService tokenService;
 
     @Autowired
     private UserService userService;
@@ -28,11 +33,12 @@ public class UserLoginController extends AppController{
     public ResponseEntity<CustomResponse> userSignUp(@RequestBody RequestUser requestUser){
         return getEntityResponseAnswer(userService.saveUser(requestUser));
     }
-
+    // /api/auth/userLogin
     @PostMapping("/userLogin")
-    public ResponseEntity<?> userLogin(@Valid @RequestBody String x) {// todo modify to LoginRequest
+    public ResponseEntity<?> userLogin(@RequestBody LoginUser loginUser) {
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        String jwt = tokenService.generateToken(loginUser);
+        return new ResponseEntity<>(jwt,HttpStatus.OK);
     }
 
     @PostMapping("/UserLogout")
@@ -42,8 +48,9 @@ public class UserLoginController extends AppController{
     }
 
     @GetMapping("/test")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<?> test() {// todo delete
-        return ResponseEntity.ok("OK it's works");
+        return ResponseEntity.ok("OK it'text works");
     }
 
 }

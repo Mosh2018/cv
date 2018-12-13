@@ -11,14 +11,14 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 
-public class UserValidationTest extends TestBase{
+public class SignUpUserValidationTest extends TestBase{
 
     @Test
     public void throwExceptionsIfUsernameIsEmpty() {
         RequestUser requestUser = getRequestUser("",
                 null, null, null, null);
         try {
-            userValidation.validateSignUp(requestUser);
+            signUpUserValidation.validateSignUp(requestUser);
             fail();
         } catch (UserNotValidException e) {
             assertEquals(CustomStatus.EMPTY, e.status);
@@ -30,7 +30,7 @@ public class UserValidationTest extends TestBase{
         RequestUser requestUser = getRequestUser("qwert",
                 null, null, null, null);
         try {
-            userValidation.validateSignUp(requestUser);
+            signUpUserValidation.validateSignUp(requestUser);
             fail();
         } catch (UserNotValidException e) {
             assertEquals(CustomStatus.SHORT_STRING, e.status);
@@ -42,7 +42,7 @@ public class UserValidationTest extends TestBase{
         RequestUser requestUser = getRequestUser("thisMostBeStringOverTwentyCharactersLong",
                 null, null, null, null);
         try {
-            userValidation.validateSignUp(requestUser);
+            signUpUserValidation.validateSignUp(requestUser);
             fail();
         } catch (UserNotValidException e) {
             assertEquals(CustomStatus.LONG_STRING, e.status);
@@ -56,7 +56,7 @@ public class UserValidationTest extends TestBase{
         when(userRepository.existsByUsername(anyString())).thenReturn(true);
 
         try {
-            userValidation.validateSignUp(requestUser);
+            signUpUserValidation.validateSignUp(requestUser);
             fail();
         } catch (UserNotValidException e) {
             assertEquals(CustomStatus.IT_IS_NOT_UNIQUE, e.status);
@@ -68,7 +68,7 @@ public class UserValidationTest extends TestBase{
         RequestUser requestUser = getRequestUser(null,
                 "w", null, null, null);
         try {
-            userValidation.validateSignUp(requestUser);
+            signUpUserValidation.validateSignUp(requestUser);
             fail();
         } catch (UserNotValidException e) {
             assertEquals(CustomStatus.SHORT_STRING, e.status);
@@ -81,7 +81,7 @@ public class UserValidationTest extends TestBase{
                 null, "", null, null);
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         try {
-            userValidation.validateSignUp(requestUser);
+            signUpUserValidation.validateSignUp(requestUser);
 
         } catch (UserNotValidException e) {
             fail();
@@ -95,7 +95,7 @@ public class UserValidationTest extends TestBase{
                 null, null, null, "123456");
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         try {
-            userValidation.validateSignUp(requestUser);
+            signUpUserValidation.validateSignUp(requestUser);
             fail();
         } catch (UserNotValidException e) {
             assertEquals(CustomStatus.IT_IS_WEAK, e.status);
@@ -108,7 +108,7 @@ public class UserValidationTest extends TestBase{
                 null, null, null, strPasswords[2]);
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         try {
-            userValidation.validateSignUp(requestUser);
+            signUpUserValidation.validateSignUp(requestUser);
 
         } catch (UserNotValidException e) {
             fail();
@@ -122,7 +122,7 @@ public class UserValidationTest extends TestBase{
                 null, null, null, strPasswords[5]);
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         try {
-            userValidation.validateSignUp(requestUser);
+            signUpUserValidation.validateSignUp(requestUser);
             fail();
         } catch (UserNotValidException e) {
 
@@ -136,7 +136,7 @@ public class UserValidationTest extends TestBase{
                 null, null, emails[0],null);
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         try {
-            userValidation.validateSignUp(requestUser);
+            signUpUserValidation.validateSignUp(requestUser);
             fail();
         } catch (UserNotValidException e) {
             assertEquals(CustomStatus.SHORT_STRING, e.status);
@@ -149,7 +149,7 @@ public class UserValidationTest extends TestBase{
                 null, null, emails[1],null);
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         try {
-            userValidation.validateSignUp(requestUser);
+            signUpUserValidation.validateSignUp(requestUser);
             fail();
         } catch (UserNotValidException e) {
             assertEquals(CustomStatus.BAD_EMAIL, e.status);
@@ -162,7 +162,7 @@ public class UserValidationTest extends TestBase{
                 null, null, emails[3],null);
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         try {
-            userValidation.validateSignUp(requestUser);
+            signUpUserValidation.validateSignUp(requestUser);
         } catch (UserNotValidException e) {
             fail();
             assertEquals(CustomStatus.BAD_EMAIL, e.status);
