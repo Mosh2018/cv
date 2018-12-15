@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { BackendApplication.class },
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class TestBase {
+public class TestBaseForValidation {
 
     @InjectMocks
     protected SignUpUserValidation signUpUserValidation;

@@ -16,8 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.Random;
 
-import static com.netum.cv.backend.validation.AppSetting.EXPERT_TIME;
-import static com.netum.cv.backend.validation.AppSetting.SECRET;
+import static com.netum.cv.backend.validation.AppSetting.*;
 
 @Service
 public class JwtTokenService {
@@ -32,6 +31,9 @@ public class JwtTokenService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private DateTimeService dateTimeService;
+
     static {
         logger = LoggerFactory.getLogger(JwtTokenService.class);
     }
@@ -39,29 +41,22 @@ public class JwtTokenService {
 
     public String generateToken(LoginUser loginUser){
 
-        if (SECRET_KEY == null) {
-
-            SECRET_KEY = passwordEncoder.encode(generateRandomSecretKey(SECRET.toInt()));
-        }
+        if (SECRET_KEY == null) SECRET_KEY = passwordEncoder.encode(generateRandomSecretKey(SECRET.toInt()));
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginUser.getUsername(),
-                        loginUser.getPassword()
-                )
+                new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + EXPERT_TIME.toLong());
-
+        Date expiryDate = dateTimeService.addMillisToDateTime(EXPERT_TIME.toLong());
+        // Todo add validation for user, secret key
         return  Jwts.builder()
                 .claim("roles", appUser.getRoles())
                 .setSubject(appUser.getUsername())
-                .setIssuedAt(now)
+                .setIssuedAt(dateTimeService.getDate())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
@@ -75,6 +70,11 @@ public class JwtTokenService {
                 .getBody();
 
         return claims.getSubject();
+    }
+
+    public String getJwtFromRequest(String jwt) {
+        String token = jwt.replace(TOKEN_PREFIX.text, "");
+        return getUsernameFromJWT(token);
     }
 
 

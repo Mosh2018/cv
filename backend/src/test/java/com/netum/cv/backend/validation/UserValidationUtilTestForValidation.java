@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class UserValidationUtilTest extends TestBase{
+public class UserValidationUtilTestForValidation extends TestBaseForValidation {
 
     @Test
     public void calculatePasswordStrength() {

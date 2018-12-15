@@ -31,7 +31,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-
         String token = request.getHeader(HEADER_STRING.text);
         if(token == null || !token.startsWith(TOKEN_PREFIX.text)){
             filterChain.doFilter(request, response);
@@ -44,7 +43,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             throw new RuntimeException("invalid token use app exception");
         }
 
-        String username = getJwtFromRequest(token);
+        String username = jwtTokenService.getJwtFromRequest(token);
         UserDetails userDetails = applicationUserDetailService.loadUserByUsername(username);
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
@@ -55,12 +54,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         filterChain.doFilter(request, response);
 
-    }
-
-    private String getJwtFromRequest(String jwt) {
-        String token = jwt.replace(TOKEN_PREFIX.text, "");
-
-        return jwtTokenService.getUsernameFromJWT(token);
     }
 }
 

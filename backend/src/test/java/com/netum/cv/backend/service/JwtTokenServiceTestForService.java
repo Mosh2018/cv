@@ -4,14 +4,17 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class JwtTokenServiceTest extends TestBase{
+public class JwtTokenServiceTestForService extends TestBaseForService {
 
     @Test
-    public void generateToken() {
+    public void generateTokenTest() {
+        String jwt = generateJwtForTest();
+        assertFalse(jwt.isEmpty());
     }
 
     @Test
     public void getUsernameFromJWT() {
+        assertEquals(username, jwtTokenService.getUsernameFromJWT(generateJwtForTest()));
     }
 
     @Test
@@ -20,13 +23,11 @@ public class JwtTokenServiceTest extends TestBase{
 
     @Test
     public void generateRandomSecretKey() {
-
         String secretKey = jwtTokenService.generateRandomSecretKey(20);
         String secretKey2= jwtTokenService.generateRandomSecretKey(20);
         assertTrue(secretKey.length() > 0);
         assertTrue(secretKey2.length() > 0);
-
         assertNotEquals(secretKey, secretKey2);
-
     }
+
 }

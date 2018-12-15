@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-public class ApplicationUserDetailServiceTest extends TestBase {
+public class ApplicationUserDetailServiceTest extends TestBaseForService {
 
     @Test
     public void loadUserByUsername() {
