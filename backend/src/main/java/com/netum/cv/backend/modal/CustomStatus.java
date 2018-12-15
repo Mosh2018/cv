@@ -13,7 +13,8 @@ public enum CustomStatus {
     LONG_STRING("This value is so long valid string less than 20 characters"),
     EMPTY("Value can not be empty"),
     IT_IS_WEAK("Can not validate it"),
-    BAD_EMAIL("This Email address is not valid");
+    BAD_EMAIL("This Email address is not valid"),
+    BAD_JWT("invalid token use app exception");
 
     private final String name;
 

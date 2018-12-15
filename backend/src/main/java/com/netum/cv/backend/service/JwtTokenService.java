@@ -38,7 +38,6 @@ public class JwtTokenService {
         logger = LoggerFactory.getLogger(JwtTokenService.class);
     }
 
-
     public String generateToken(LoginUser loginUser){
 
         if (SECRET_KEY == null) SECRET_KEY = passwordEncoder.encode(generateRandomSecretKey(SECRET.toInt()));
@@ -72,11 +71,9 @@ public class JwtTokenService {
         return claims.getSubject();
     }
 
-    public String getJwtFromRequest(String jwt) {
-        String token = jwt.replace(TOKEN_PREFIX.text, "");
+    public String getJwtFromRequest(String token) {
         return getUsernameFromJWT(token);
     }
-
 
     public boolean isInvalidateToken(String authToken) {
         try {
@@ -95,7 +92,6 @@ public class JwtTokenService {
         }
         return true;
     }
-
 
      String generateRandomSecretKey(int len) {
 

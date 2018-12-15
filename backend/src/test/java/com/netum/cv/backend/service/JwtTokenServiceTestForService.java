@@ -14,7 +14,8 @@ public class JwtTokenServiceTestForService extends TestBaseForService {
 
     @Test
     public void getUsernameFromJWT() {
-        assertEquals(username, jwtTokenService.getUsernameFromJWT(generateJwtForTest()));
+        String jwt = generateJwtForTest();
+        assertEquals(username, jwtTokenService.getUsernameFromJWT(jwt));
     }
 
     @Test

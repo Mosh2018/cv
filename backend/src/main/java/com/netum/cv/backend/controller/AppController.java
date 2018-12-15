@@ -1,5 +1,6 @@
 package com.netum.cv.backend.controller;
 
+import com.netum.cv.backend.exceptions.JwtTokenException;
 import com.netum.cv.backend.exceptions.UserNotValidException;
 import com.netum.cv.backend.modal.CustomResponse;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,17 @@ public class AppController {
                 return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.FORBIDDEN);
                 default:
                     return getEntityResponseAnswer(CustomResponse.build(exception.status));
+        }
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<CustomResponse> jwtExceptionHandler(JwtTokenException exception) {
+
+        switch (exception.status) {
+            case BAD_JWT:
+                new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.FORBIDDEN);
+            default:
+                return getEntityResponseAnswer(CustomResponse.build(exception.status));
         }
     }
 }

@@ -14,6 +14,7 @@ public enum AppSetting {
     last_name_max("16"),
 
     SECRET("30"),
+    SECRET_KEY(""),
     TOKEN_PREFIX("Bearer "),
     HEADER_STRING("Authorization"),
     EXPERT_TIME("120000")
@@ -30,5 +31,8 @@ public enum AppSetting {
     }
     public Long toLong() {
         return Long.parseLong(text);
+    }
+    public void addString(String text) {
+        this.text = text;
     }
 }

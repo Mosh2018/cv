@@ -48,7 +48,7 @@ public class UserLoginController extends AppController{
     }
 
     @GetMapping("/test")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER' )")
     public ResponseEntity<?> test() {// todo delete
         return ResponseEntity.ok("OK it'text works");
     }

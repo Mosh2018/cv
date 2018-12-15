@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -57,16 +58,21 @@ public class TestBaseForService {
 
     }
 
-
     protected void mockAuthentication() {
         Authentication authenticationMock = mock(Authentication.class);
         when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(authenticationMock);
         when(authenticationMock.getPrincipal()).thenReturn(createApplicationUserForTest());
     }
 
+    protected void mockAddDateTimeService() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.HOUR_OF_DAY, 1);
+        when(dateTimeService.addMillisToDateTime(any(Long.class))).thenReturn(calendar.getTime());
+    }
+
     protected void mockDateTimeService() {
-        // 15/12/2018 12:39
-        when(dateTimeService.addMillisToDateTime(any(Long.class))).thenReturn(new Date(1544877540000L));
+        when(dateTimeService.getDate()).thenReturn(new Date());
     }
 
     protected void mockpassWordEccoder() {
@@ -96,6 +102,7 @@ public class TestBaseForService {
 
     protected String generateJwtForTest() {
         mockAuthentication();
+        mockAddDateTimeService();
         mockDateTimeService();
         mockpassWordEccoder();
 
