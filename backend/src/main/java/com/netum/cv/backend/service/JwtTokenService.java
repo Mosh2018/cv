@@ -1,6 +1,8 @@
 package com.netum.cv.backend.service;
 
+import com.netum.cv.backend.exceptions.JwtTokenException;
 import com.netum.cv.backend.modal.AppUser;
+import com.netum.cv.backend.modal.CustomStatus;
 import com.netum.cv.backend.modal.LoginUser;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -47,7 +49,6 @@ public class JwtTokenService {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         AppUser appUser = (AppUser) authentication.getPrincipal();
 
         Date expiryDate = dateTimeService.addMillisToDateTime(EXPERT_TIME.toLong());
@@ -59,7 +60,6 @@ public class JwtTokenService {
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
-
     }
 
     public String getUsernameFromJWT(String token) {
@@ -71,26 +71,33 @@ public class JwtTokenService {
         return claims.getSubject();
     }
 
-    public String getJwtFromRequest(String token) {
+    public String getJwtFromRequest(String jwt) {
+        String token = getTokenFromJwt(jwt);
+        isInvalidateToken(token);
         return getUsernameFromJWT(token);
     }
 
-    public boolean isInvalidateToken(String authToken) {
+    public String getTokenFromJwt(String jwt) {
+        String token = jwt.replace(TOKEN_PREFIX.text, "");
+        return token;
+    }
+
+    public void isInvalidateToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(authToken);
-            return false;
         } catch (SignatureException ex) {
-            logger.error("Invalid JWT signature");
+            throw new JwtTokenException(CustomStatus.BAD_SIGNATURE);
         } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
+            throw new JwtTokenException(CustomStatus.JWT_INVALID);
         } catch (ExpiredJwtException ex) {
-            logger.error("Expired JWT token");
+            throw new JwtTokenException(CustomStatus.JWT_TIME_EXPIRED);
         } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
+            throw new JwtTokenException(CustomStatus.UNSUPPORTED_JWT);
         } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty.");
+            throw new JwtTokenException(CustomStatus.EMPTY_JWT);
+        } catch (RuntimeException e) {
+            throw new JwtTokenException(CustomStatus.BAD_JWT);
         }
-        return true;
     }
 
      String generateRandomSecretKey(int len) {

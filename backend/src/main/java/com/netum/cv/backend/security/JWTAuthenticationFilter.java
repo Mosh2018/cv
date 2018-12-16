@@ -1,7 +1,5 @@
 package com.netum.cv.backend.security;
 
-import com.netum.cv.backend.exceptions.JwtTokenException;
-import com.netum.cv.backend.modal.CustomStatus;
 import com.netum.cv.backend.service.ApplicationUserDetailService;
 import com.netum.cv.backend.service.JwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,19 +33,13 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String jwt = request.getHeader(HEADER_STRING.text);
-        if(jwt == null || !jwt.startsWith(TOKEN_PREFIX.text)){
+        if(jwt == null || !jwt.startsWith(TOKEN_PREFIX.text)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = jwt.replace(TOKEN_PREFIX.text, "");
-        boolean invalid = jwtTokenService.isInvalidateToken(token);
+        String username = jwtTokenService.getJwtFromRequest(jwt);
 
-        if (invalid){
-            throw new JwtTokenException(CustomStatus.BAD_JWT);
-        }
-
-        String username = jwtTokenService.getJwtFromRequest(token);
         UserDetails userDetails = applicationUserDetailService.loadUserByUsername(username);
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =

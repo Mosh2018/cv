@@ -23,26 +23,25 @@ public class UserLoginController extends AppController{
     @Autowired
     private UserService userService;
 
-    @GetMapping("/getUser/{username}")
-    public ResponseEntity<?> getUserInformation(@Valid @PathVariable String username) {
-
-        return ResponseEntity.ok(userService.getUserInformation(username));
-    }
-
     @PostMapping("/sign-up")
-    public ResponseEntity<CustomResponse> userSignUp(@RequestBody RequestUser requestUser){
+    public ResponseEntity<CustomResponse> userSignUp(@Valid @RequestBody RequestUser requestUser){
         return getEntityResponseAnswer(userService.saveUser(requestUser));
     }
-    // /api/auth/userLogin
+
     @PostMapping("/userLogin")
-    public ResponseEntity<?> userLogin(@RequestBody LoginUser loginUser) {
+    public ResponseEntity<?> userLogin(@Valid @RequestBody LoginUser loginUser) {
 
         String jwt = tokenService.generateToken(loginUser);
         return new ResponseEntity<>(jwt,HttpStatus.OK);
     }
 
+    @GetMapping("/getUser")
+    public ResponseEntity<?> getUserInformation() {
+        return ResponseEntity.ok(userService.getUserInformation());
+    }
+
     @PostMapping("/UserLogout")
-    public ResponseEntity<?> userLogout(@Valid @RequestBody String x) {// todo modify to User
+    public ResponseEntity<?> userLogout() {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

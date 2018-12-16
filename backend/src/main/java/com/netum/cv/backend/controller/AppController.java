@@ -45,9 +45,15 @@ public class AppController {
 
         switch (exception.status) {
             case BAD_JWT:
-                new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.FORBIDDEN);
+            case BAD_SIGNATURE:
+            case JWT_INVALID:
+            case JWT_TIME_EXPIRED:
+            case UNSUPPORTED_JWT:
+            case EMPTY_JWT:
+                return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.FORBIDDEN);
+
             default:
-                return getEntityResponseAnswer(CustomResponse.build(exception.status));
+                return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.FORBIDDEN);
         }
     }
 }

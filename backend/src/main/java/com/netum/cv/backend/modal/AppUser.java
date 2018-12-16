@@ -27,6 +27,7 @@ public class AppUser implements UserDetails {
     @JsonIgnore
     private String email;
 
+    @JsonIgnore
     private Collection<? extends GrantedAuthority> authorities;
 
     public static AppUser create(User user) {
@@ -37,13 +38,11 @@ public class AppUser implements UserDetails {
                         new SimpleGrantedAuthority(role.getRoleName().name()))
                 .collect(Collectors.toList());
 
-
         return new AppUser(
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
                 authorities);
-
     }
 
     public List<String> getRoles() {

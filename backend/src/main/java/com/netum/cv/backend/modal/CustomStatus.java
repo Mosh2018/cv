@@ -14,7 +14,12 @@ public enum CustomStatus {
     EMPTY("Value can not be empty"),
     IT_IS_WEAK("Can not validate it"),
     BAD_EMAIL("This Email address is not valid"),
-    BAD_JWT("invalid token use app exception");
+    BAD_JWT("invalid token use app exception"),
+    BAD_SIGNATURE("Invalid JWT signature"),
+    JWT_INVALID("Invalid JWT token"),
+    UNSUPPORTED_JWT("Unsupported JWT token"),
+    EMPTY_JWT("JWT claims string is empty."),
+    JWT_TIME_EXPIRED("Expired JWT token");
 
     private final String name;
 
