@@ -2,6 +2,7 @@ package com.netum.cv.backend.validation;
 
 public enum AppSetting {
 
+    MAX_AGE_SECS( "3600"),
     username_min("6"),
     username_max("20"),
     password_min("4"),
