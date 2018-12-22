@@ -1,12 +1,12 @@
 package com.netum.cv.backend.service;
 
 import com.netum.cv.backend.entity.Role;
-import com.netum.cv.backend.entity.RoleName;
 import com.netum.cv.backend.entity.User;
 import com.netum.cv.backend.facade.IAuthenticationFacade;
 import com.netum.cv.backend.modal.AppUser;
 import com.netum.cv.backend.modal.CustomResponse;
 import com.netum.cv.backend.modal.RequestUser;
+import com.netum.cv.backend.modal.RoleName;
 import com.netum.cv.backend.repositories.RoleRepository;
 import com.netum.cv.backend.repositories.UserRepository;
 import com.netum.cv.backend.validation.SignUpUserValidation;
@@ -36,9 +36,12 @@ public class UserService {
     @Autowired
     private IAuthenticationFacade authenticationFacade;
 
-    public AppUser getUserInformation() {
-        User userEntity = userRepository.findByUsername(authenticationFacade.getUsername()).get();
-        return AppUser.create(userEntity);
+    public AppUser getAppUser() {
+        return AppUser.create(getUserEntity());
+    }
+
+    public User getUserEntity() {
+        return userRepository.findByUsername(authenticationFacade.getUsername()).get();
     }
 
     public CustomResponse saveUser(RequestUser requestUser) {

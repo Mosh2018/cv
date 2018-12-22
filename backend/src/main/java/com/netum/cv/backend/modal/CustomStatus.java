@@ -19,12 +19,18 @@ public enum CustomStatus {
     JWT_INVALID("Invalid JWT token"),
     UNSUPPORTED_JWT("Unsupported JWT token"),
     EMPTY_JWT("JWT claims string is empty."),
-    JWT_TIME_EXPIRED("Expired JWT token");
+    JWT_TIME_EXPIRED("Expired JWT token"),
+    USER_NOT_SAVED("Something goes wrong, user didn't saved"),
+    PROFILE_NOT_SAVED("Something goes wrong, Profile didn't saved");
 
-    private final String name;
+    public String name;
 
     CustomStatus(String name) {
         this.name = name;
+    }
+
+    public void setCustomStatusAMessage(String message) {
+        this.name.concat(" - " + message);
     }
 
 }

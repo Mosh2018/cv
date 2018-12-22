@@ -1,13 +1,15 @@
 package com.netum.cv.backend.controller;
 
 import com.netum.cv.backend.exceptions.JwtTokenException;
+import com.netum.cv.backend.exceptions.UseJPAException;
 import com.netum.cv.backend.exceptions.UserNotValidException;
 import com.netum.cv.backend.modal.CustomResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.netum.cv.backend.modal.CustomStatus.*;
+import static com.netum.cv.backend.modal.CustomStatus.IT_IS_OK;
+import static com.netum.cv.backend.modal.CustomStatus.PASS_VALIDATION;
 
 public class AppController {
 
@@ -54,6 +56,20 @@ public class AppController {
 
             default:
                 return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<CustomResponse> userJpaExceptions(UseJPAException exception) {
+
+        switch (exception.status) {
+            case USER_NOT_SAVED:
+            case PROFILE_NOT_SAVED:
+                return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.EXPECTATION_FAILED);
+
+                default:
+                    return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.FORBIDDEN);
+
         }
     }
 }

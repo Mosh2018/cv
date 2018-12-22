@@ -1,8 +1,8 @@
 package com.netum.cv.backend.service;
 
 import com.netum.cv.backend.entity.Role;
-import com.netum.cv.backend.entity.RoleName;
 import com.netum.cv.backend.entity.User;
+import com.netum.cv.backend.modal.RoleName;
 import org.junit.Test;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +13,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 public class ApplicationUserDetailServiceTest extends TestBaseForService {

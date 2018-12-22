@@ -14,8 +14,8 @@ import java.io.Serializable;
 import java.time.Instant;
 
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)// to automatically populate createdAt and updatedAt values when we persist an entity.
-@JsonIgnoreProperties(
+// to automatically populate createdAt and updatedAt values when we persist an entity.
+@EntityListeners(AuditingEntityListener.class)@JsonIgnoreProperties(
         value = {"createdAt", "updatedAt"},
         allowGetters = true
 )

@@ -3,7 +3,7 @@ package com.netum.cv.backend.validation;
 import org.junit.Test;
 
 import static com.netum.cv.backend.validation.AppSetting.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class AppSettingTest extends TestBaseForValidation {
 

@@ -18,7 +18,7 @@ public enum AppSetting {
     SECRET_KEY(""),
     TOKEN_PREFIX("Bearer "),
     HEADER_STRING("Authorization"),
-    EXPERT_TIME("120000")
+    EXPERT_TIME("1200000")
     ;
 
 

@@ -1,5 +1,6 @@
 package com.netum.cv.backend.entity;
 
+import com.netum.cv.backend.modal.RoleName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

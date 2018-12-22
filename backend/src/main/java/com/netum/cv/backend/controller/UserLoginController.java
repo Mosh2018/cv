@@ -37,7 +37,7 @@ public class UserLoginController extends AppController{
 
     @GetMapping("/getUser")
     public ResponseEntity<?> getUserInformation() {
-        return ResponseEntity.ok(userService.getUserInformation());
+        return ResponseEntity.ok(userService.getAppUser());
     }
 
     @PostMapping("/UserLogout")

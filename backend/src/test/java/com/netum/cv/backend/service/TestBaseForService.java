@@ -2,10 +2,10 @@ package com.netum.cv.backend.service;
 
 import com.netum.cv.backend.BackendApplication;
 import com.netum.cv.backend.entity.Role;
-import com.netum.cv.backend.entity.RoleName;
 import com.netum.cv.backend.entity.User;
 import com.netum.cv.backend.modal.AppUser;
 import com.netum.cv.backend.modal.LoginUser;
+import com.netum.cv.backend.modal.RoleName;
 import com.netum.cv.backend.repositories.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
