@@ -6,6 +6,7 @@ import com.netum.cv.backend.entity.User;
 import com.netum.cv.backend.modal.AppUser;
 import com.netum.cv.backend.modal.LoginUser;
 import com.netum.cv.backend.modal.RoleName;
+import com.netum.cv.backend.repositories.ProfileRepository;
 import com.netum.cv.backend.repositories.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,6 +38,11 @@ public class TestBaseForService {
 
     @InjectMocks
     protected JwtTokenService jwtTokenService;
+
+    @InjectMocks
+    protected CvServices cvServices;
+    @Mock
+    protected ProfileRepository profileRepository;
 
     @Mock
     protected UserRepository userRepository;

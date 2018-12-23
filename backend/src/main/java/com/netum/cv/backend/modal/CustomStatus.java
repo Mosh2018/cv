@@ -23,7 +23,8 @@ public enum CustomStatus {
     JWT_TIME_EXPIRED("Expired JWT token"),
     USER_NOT_SAVED("Something goes wrong, user didn't saved"),
     INVALID_DATE("Date format invalid"),
-    PROFILE_NOT_SAVED("Something goes wrong, Profile didn't saved");
+    PROFILE_NOT_SAVED("Something goes wrong, Profile didn't saved"),
+    PROFILE_INVALID("Can not find Profile to this user");
 
     public String name;
 

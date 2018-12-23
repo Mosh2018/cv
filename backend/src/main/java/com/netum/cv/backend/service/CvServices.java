@@ -10,8 +10,11 @@ import com.netum.cv.backend.repositories.ProfileRepository;
 import com.netum.cv.backend.repositories.UserRepository;
 import com.netum.cv.backend.validation.CvValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CvServices {
@@ -33,7 +36,6 @@ public class CvServices {
         if (CustomStatus.PASS_VALIDATION.equals(cvValidation.validateProfile(cvProfile))) {
             saveProfile(cvProfile);
         }
-
         return ResponseEntity.ok(CustomResponse.build(CustomStatus.IT_IS_OK));
     }
 
@@ -69,14 +71,16 @@ public class CvServices {
         profile.setZipCode(cvProfile.getZipCode());
         return profileRepository.save(profile);
     }
+    public ResponseEntity<CvProfile> getProfile() {
 
-    public ResponseEntity<Profile> getProfile() {
-        // get username
-        // get profile id
-        // get profile from by
+        User user = userService.getUserEntity();
+        if (user != null && user.getProfile() != null) {
+            return new ResponseEntity(CvProfile.createCvProfile(user.getProfile()), HttpStatus.OK);
+        } else {
+            if (user == null) throw new UseJPAException(CustomStatus.JWT_INVALID);
+            else throw new UseJPAException(CustomStatus.PROFILE_NOT_SAVED);
+        }
 
-        return ResponseEntity.ok(new Profile());
     }
-    // retrive profile
 
 }
