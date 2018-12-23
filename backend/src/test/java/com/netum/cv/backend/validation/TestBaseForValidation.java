@@ -18,6 +18,9 @@ public class TestBaseForValidation {
     @InjectMocks
     protected SignUpUserValidation signUpUserValidation;
 
+    @InjectMocks
+    protected CvValidation cvValidation;
+
     @Mock
     protected UserRepository userRepository;
 
@@ -49,6 +52,27 @@ public class TestBaseForValidation {
             "Shaker@suomi",
             "Shaker@suomi.",
 
+    };
+
+    String[] validPhoneNumbers = {
+            "1234 567",
+            "1234 56 7 8 9 0",
+            "123456789012345"};
+
+    String[] invalidPhoneNumbers = {
+            "123456",
+            "1w34567",
+            "!2345678",
+            "123456789/",
+            "12345678 @",
+            "12345678901234567"};
+
+    String[] validBirthdays = {
+            "01.01.2010"
+    };
+
+    String[] invalidBirthdays = {
+            "1.01.2010"
     };
 
 

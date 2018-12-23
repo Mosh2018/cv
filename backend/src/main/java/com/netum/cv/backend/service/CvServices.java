@@ -8,6 +8,7 @@ import com.netum.cv.backend.modal.CustomStatus;
 import com.netum.cv.backend.modal.CvProfile;
 import com.netum.cv.backend.repositories.ProfileRepository;
 import com.netum.cv.backend.repositories.UserRepository;
+import com.netum.cv.backend.validation.CvValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,24 @@ public class CvServices {
     @Autowired
     private ProfileRepository profileRepository;
 
+    @Autowired
+    private CvValidation cvValidation;
+
     public ResponseEntity<CustomResponse> AddOrUpdateProfile(CvProfile cvProfile) throws Exception {
 
+        if (CustomStatus.PASS_VALIDATION.equals(cvValidation.validateProfile(cvProfile))) {
+            saveProfile(cvProfile);
+        }
+
+        return ResponseEntity.ok(CustomResponse.build(CustomStatus.IT_IS_OK));
+    }
+
+    private void saveProfile(CvProfile cvProfile) {
         User user = userService.getUserEntity();
         if(user.getProfile() == null) {
             try {
-                Profile profileEntity = initProfile(cvProfile);
+                Profile profileEntity = new Profile();
+                profileEntity.initProfile(cvProfile);
                 Profile savedProfile = profileRepository.save(profileEntity);
                 user.setProfile(savedProfile);
                 userRepository.save(user);
@@ -44,8 +57,6 @@ public class CvServices {
                 throw new UseJPAException(CustomStatus.PROFILE_NOT_SAVED);
             }
         }
-
-        return ResponseEntity.ok(CustomResponse.build(CustomStatus.IT_IS_OK));
     }
 
     private Profile updateProfile(Profile profile, CvProfile cvProfile) {
@@ -57,13 +68,6 @@ public class CvServices {
         profile.setCity(cvProfile.getCity());
         profile.setZipCode(cvProfile.getZipCode());
         return profileRepository.save(profile);
-    }
-
-    private Profile initProfile(CvProfile cvProfile) throws Exception {
-        // validate profile
-        Profile profile = new Profile();
-        return profile.initProfile(cvProfile);
-
     }
 
     public ResponseEntity<Profile> getProfile() {

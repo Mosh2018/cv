@@ -7,6 +7,7 @@ public enum CustomStatus {
     NOT_FOUND("User not found, can not find user for this username"),
     IT_IS_OK(""),
     NOT_VALID(""),
+    NOT_VALID_NO("phone number not valid"),
     PASS_VALIDATION(""),
     SHORT_STRING("This value is too short valid string more than 1 character"),
     IT_IS_NOT_UNIQUE("The value it is not unique change the value"),
@@ -21,6 +22,7 @@ public enum CustomStatus {
     EMPTY_JWT("JWT claims string is empty."),
     JWT_TIME_EXPIRED("Expired JWT token"),
     USER_NOT_SAVED("Something goes wrong, user didn't saved"),
+    INVALID_DATE("Date format invalid"),
     PROFILE_NOT_SAVED("Something goes wrong, Profile didn't saved");
 
     public String name;

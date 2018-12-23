@@ -13,6 +13,17 @@ public enum AppSetting {
     first_name_max("16"),
     last_name_min("0"),
     last_name_max("16"),
+    zipcode_min("2"),
+    zipcode_max("10"),
+    city_min("3"),
+    city_max("20"),
+    country_min("3"),
+    country_max("20"),
+    address_min("5"),
+    address_max("30"),
+    nationality_min("0"),
+    nationality_max("20"),
+
 
     SECRET("30"),
     SECRET_KEY(""),

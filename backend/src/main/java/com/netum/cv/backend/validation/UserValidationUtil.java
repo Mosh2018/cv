@@ -2,6 +2,8 @@ package com.netum.cv.backend.validation;
 
 import com.netum.cv.backend.exceptions.UserNotValidException;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,5 +67,29 @@ public class UserValidationUtil {
                 .matcher(email);
 
         return !matcher.find();
+    }
+
+    public static boolean invalidatePhoneNumber(String phoneNumber) {
+        String spaceRemovedString = phoneNumber.replace(" ", "");
+        Matcher matcher = Pattern.compile("^\\d{7,16}$").matcher(spaceRemovedString);
+
+        return !matcher.find();
+    }
+
+    public static boolean inValidBirthdayFormat(String birthday) {
+        String spaceRemovedString = birthday.replace(" ", "");
+        Matcher matcher = Pattern.compile("^\\d{2}.\\d{2}.\\d{4}$").matcher(spaceRemovedString);
+
+        return !matcher.find();
+    }
+
+
+    public static Date getNowWithoutTime() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 }

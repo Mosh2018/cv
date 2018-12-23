@@ -39,4 +39,32 @@ public class UserValidationUtilTestForValidation extends TestBaseForValidation {
         assertTrue(UserValidationUtil.invalidEmail(emails[5]));
     }
 
+    @Test
+    public void isValidPhoneNumber() {
+    assertFalse(UserValidationUtil.invalidatePhoneNumber(validPhoneNumbers[0]));
+    assertFalse(UserValidationUtil.invalidatePhoneNumber(validPhoneNumbers[1]));
+    assertFalse(UserValidationUtil.invalidatePhoneNumber(validPhoneNumbers[2]));
+
+    }
+
+
+    @Test
+    public void invalidPhoneNumbers() {
+        assertTrue(UserValidationUtil.invalidatePhoneNumber(invalidPhoneNumbers[0]));
+        assertTrue(UserValidationUtil.invalidatePhoneNumber(invalidPhoneNumbers[1]));
+        assertTrue(UserValidationUtil.invalidatePhoneNumber(invalidPhoneNumbers[2]));
+        assertTrue(UserValidationUtil.invalidatePhoneNumber(invalidPhoneNumbers[3]));
+        assertTrue(UserValidationUtil.invalidatePhoneNumber(invalidPhoneNumbers[4]));
+        assertTrue(UserValidationUtil.invalidatePhoneNumber(invalidPhoneNumbers[5]));
+    }
+
+    @Test
+    public void isValidBirthday() {
+        assertFalse(UserValidationUtil.inValidBirthdayFormat(validBirthdays[0]));
+    }
+
+    @Test
+    public void isInvalidBirthday() {
+        assertTrue(UserValidationUtil.inValidBirthdayFormat(invalidBirthdays[0]));
+    }
 }
