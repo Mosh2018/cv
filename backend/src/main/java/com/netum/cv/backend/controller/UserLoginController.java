@@ -40,14 +40,13 @@ public class UserLoginController extends AppController{
         return ResponseEntity.ok(userService.getAppUser());
     }
 
-    @PostMapping("/UserLogout")
+    @GetMapping("/userLogout")
     public ResponseEntity<?> userLogout() {
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/test")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER' )")
+    @PreAuthorize("hasAnyRole('ROLE_USER' )")
     public ResponseEntity<?> test() {// todo delete
         return ResponseEntity.ok("OK it'text works");
     }

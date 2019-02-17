@@ -34,7 +34,7 @@ public class CvValidation {
     }
 
     private void isValidZipCode(String zipCode) {
-        isValidStringValue(zipCode, zipcode_min.toInt(), zipcode_max.toInt());
+        isValidStringValue(zipCode, zipCode_min.toInt(), zipCode_max.toInt());
     }
 
     private void isValidCity(String city) {

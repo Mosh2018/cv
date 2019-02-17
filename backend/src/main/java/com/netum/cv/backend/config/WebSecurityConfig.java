@@ -2,7 +2,6 @@ package com.netum.cv.backend.config;
 
 import com.netum.cv.backend.security.JWTAuthenticationFilter;
 import com.netum.cv.backend.service.ApplicationUserDetailService;
-import com.netum.cv.backend.validation.JwtAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -51,6 +51,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new JWTAuthenticationFilter();
     }
 
+    @Bean
+    public CustomLogoutHandler customLogoutHandler() {
+        return new CustomLogoutHandler();
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -71,7 +75,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/auth/userLogin").permitAll()
                 .antMatchers("/api/cv/**").authenticated()
                 .and()
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/auth/userLogout"))
+                .addLogoutHandler(customLogoutHandler());
 
     }
 }

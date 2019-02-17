@@ -13,8 +13,8 @@ public enum AppSetting {
     first_name_max("16"),
     last_name_min("0"),
     last_name_max("16"),
-    zipcode_min("2"),
-    zipcode_max("10"),
+    zipCode_min("2"),
+    zipCode_max("10"),
     city_min("3"),
     city_max("20"),
     country_min("3"),
@@ -23,7 +23,6 @@ public enum AppSetting {
     address_max("30"),
     nationality_min("0"),
     nationality_max("20"),
-
 
     SECRET("30"),
     SECRET_KEY(""),
@@ -34,8 +33,8 @@ public enum AppSetting {
 
 
     public String text;
-    AppSetting(String s) {
-        this.text = s;
+    AppSetting(String value) {
+        this.text = value;
     }
 
     public int toInt() {

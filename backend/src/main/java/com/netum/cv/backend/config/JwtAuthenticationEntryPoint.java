@@ -1,4 +1,4 @@
-package com.netum.cv.backend.validation;
+package com.netum.cv.backend.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
