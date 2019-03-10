@@ -1,12 +1,12 @@
 package com.netum.cv.backend.service;
 
 import com.netum.cv.backend.controller.AppController;
+import com.netum.cv.backend.entity.User;
 import com.netum.cv.backend.exceptions.JwtTokenException;
 import com.netum.cv.backend.modal.AppUser;
 import com.netum.cv.backend.modal.CustomStatus;
 import com.netum.cv.backend.modal.LoginUser;
 import io.jsonwebtoken.*;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,24 +38,23 @@ public class JwtTokenService extends AppController {
     @Autowired
     private DateTimeService dateTimeService;
 
+    @Autowired
+    private UserService userService;
+
     static {
         logger = LoggerFactory.getLogger(JwtTokenService.class);
     }
 
-    public void changeSeurityKey() {
-        SECRET_KEY = passwordEncoder.encode(generateRandomSecretKey(SECRET.toInt()));
+    public void deleteSecurityKey() {
+        userService.saveSecurityKey(null);
     }
 
     public String generateToken(LoginUser loginUser){
-
-        if (SECRET_KEY == null) SECRET_KEY = passwordEncoder.encode(generateRandomSecretKey(SECRET.toInt()));
-        System.out.println("MOSH#" + SECRET_KEY);
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword())
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        AppUser appUser = (AppUser) authentication.getPrincipal();
+        AppUser appUser = getAppUser(loginUser);
+        SECRET_KEY = appUser.getSecurityKey();
+        if(SECRET_KEY == null){
+            generateAndSaveSecurityKeyToDB();
+        }
 
         Date expiryDate = dateTimeService.addMillisToDateTime(EXPERT_TIME.toLong());
         // Todo add validation for user, secret key
@@ -66,6 +65,19 @@ public class JwtTokenService extends AppController {
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
+    }
+
+    private AppUser getAppUser(LoginUser loginUser) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword())
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return (AppUser) authentication.getPrincipal();
+    }
+
+    private void generateAndSaveSecurityKeyToDB() {
+        SECRET_KEY = passwordEncoder.encode(generateRandomSecretKey(SECRET.toInt()));
+        userService.saveSecurityKey(SECRET_KEY);
     }
 
     public String getUsernameFromJWT(String token) {

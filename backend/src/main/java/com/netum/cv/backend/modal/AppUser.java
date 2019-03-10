@@ -27,6 +27,9 @@ public class AppUser implements UserDetails {
     private String email;
 
     @JsonIgnore
+    private String securityKey;
+
+    @JsonIgnore
     private Collection<? extends GrantedAuthority> authorities;
 
     public static AppUser create(User user) {
@@ -41,6 +44,7 @@ public class AppUser implements UserDetails {
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
+                user.getSecurityKey(),
                 authorities);
     }
 
@@ -97,11 +101,12 @@ public class AppUser implements UserDetails {
         return Objects.equals(username, appUser.username) &&
                 Objects.equals(password, appUser.password) &&
                 Objects.equals(email, appUser.email) &&
+                Objects.equals(securityKey, appUser.securityKey) &&
                 Objects.equals(authorities, appUser.authorities);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, password, email, authorities);
+        return Objects.hash(username, password, email, securityKey, authorities);
     }
 }

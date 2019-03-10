@@ -1,3 +1,5 @@
+DROP TABLE if EXISTS cv_profile;
+
 CREATE TABLE `cv_profile` (
   id bigint(20) AUTO_INCREMENT NOT NULL,
   phone_number CHAR (20) NOT NULL,

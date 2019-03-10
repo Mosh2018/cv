@@ -42,6 +42,7 @@ public class UserLoginController extends AppController{
 
     @GetMapping("/userLogout")
     public ResponseEntity<?> userLogout() {
+        int i = 0 ;
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

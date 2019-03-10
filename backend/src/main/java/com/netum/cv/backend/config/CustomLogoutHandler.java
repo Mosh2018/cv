@@ -12,9 +12,14 @@ public class CustomLogoutHandler extends SecurityContextLogoutHandler {
 
     @Autowired
     private JwtTokenService jwtTokenService;
-    
+
+    @Override
+    public void setClearAuthentication(boolean clearAuthentication) {
+        if (jwtTokenService != null) jwtTokenService.deleteSecurityKey();
+    }
+
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        jwtTokenService.changeSeurityKey();
+        jwtTokenService.deleteSecurityKey();
     }
 }

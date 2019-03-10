@@ -9,6 +9,7 @@ CREATE TABLE users (
   last_name VARCHAR (40),
   email VARCHAR (40) NOT NULL,
   password VARCHAR(255) NOT NULL,
+  security_key VARCHAR(255),
   PRIMARY KEY (id),
   UNIQUE KEY uk_users_username (username),
   UNIQUE KEY uk_users_email (email)

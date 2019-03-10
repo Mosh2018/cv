@@ -56,6 +56,12 @@ public class UserService {
         return result;
     }
 
+    public void saveSecurityKey(String securityKey) {
+        User user = this.getUserEntity();
+        user.setSecurityKey(securityKey);
+        userRepository.save(user);
+    }
+
     private User populateUser(RequestUser requestUser) {
         String passwordDecoded = passwordEncoder.encode(requestUser.getPassword());
         User user = new User();

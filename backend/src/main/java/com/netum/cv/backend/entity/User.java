@@ -43,6 +43,8 @@ public class User extends ChangeTime {
     @NotBlank
     private String password;
 
+    private String securityKey;
+
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "user_roles",
     joinColumns = @JoinColumn(name = "user_id"),
