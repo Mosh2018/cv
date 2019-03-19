@@ -5,8 +5,10 @@ import com.netum.cv.backend.entity.User;
 import com.netum.cv.backend.exceptions.JwtTokenException;
 import com.netum.cv.backend.modal.AppUser;
 import com.netum.cv.backend.modal.CustomStatus;
+import com.netum.cv.backend.modal.LoginResponse;
 import com.netum.cv.backend.modal.LoginUser;
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +25,8 @@ import java.util.Random;
 import static com.netum.cv.backend.validation.AppSetting.*;
 
 @Service
+@Slf4j
 public class JwtTokenService extends AppController {
-
-    private static final Logger logger;
 
     private static String SECRET_KEY = null;
 
@@ -41,16 +42,13 @@ public class JwtTokenService extends AppController {
     @Autowired
     private UserService userService;
 
-    static {
-        logger = LoggerFactory.getLogger(JwtTokenService.class);
-    }
-
     public void deleteSecurityKey() {
         userService.saveSecurityKey(null);
     }
 
     public String generateToken(LoginUser loginUser){
         AppUser appUser = getAppUser(loginUser);
+        User user = userService.getUserEntity();
         SECRET_KEY = appUser.getSecurityKey();
         if(SECRET_KEY == null){
             generateAndSaveSecurityKeyToDB();
@@ -60,6 +58,9 @@ public class JwtTokenService extends AppController {
         // Todo add validation for user, secret key
         return  Jwts.builder()
                 .claim("roles", appUser.getRoles())
+                .claim("firstName", user.getFirstName())
+                .claim("lastName", user.getLastName())
+                .claim("email", user.getEmail())
                 .setSubject(appUser.getUsername())
                 .setIssuedAt(dateTimeService.getDate())
                 .setExpiration(expiryDate)

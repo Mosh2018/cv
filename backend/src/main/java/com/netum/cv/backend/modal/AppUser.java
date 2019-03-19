@@ -31,7 +31,7 @@ public class AppUser implements UserDetails {
 
     @JsonIgnore
     private Collection<? extends GrantedAuthority> authorities;
-
+    // todo modify to return firstname and lastname too!
     public static AppUser create(User user) {
         Collection<GrantedAuthority> authorities = user
                 .getRoles()

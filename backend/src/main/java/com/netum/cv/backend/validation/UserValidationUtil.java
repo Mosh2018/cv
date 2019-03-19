@@ -92,4 +92,11 @@ public class UserValidationUtil {
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
     }
+
+    public static boolean isEmptyString(String str) {
+        if(str == null || str == "") {
+            return true;
+        }
+        return false;
+    }
 }

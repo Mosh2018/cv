@@ -1,8 +1,6 @@
 package com.netum.cv.backend.controller;
 
-import com.netum.cv.backend.modal.CustomResponse;
-import com.netum.cv.backend.modal.LoginUser;
-import com.netum.cv.backend.modal.RequestUser;
+import com.netum.cv.backend.modal.*;
 import com.netum.cv.backend.service.JwtTokenService;
 import com.netum.cv.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserLoginController extends AppController{
 
     @Autowired
@@ -29,10 +28,9 @@ public class UserLoginController extends AppController{
     }
 
     @PostMapping("/userLogin")
-    public ResponseEntity<?> userLogin(@Valid @RequestBody LoginUser loginUser) {
-
+    public ResponseEntity<LoginResponse> userLogin(@RequestBody LoginUser loginUser) {
         String jwt = tokenService.generateToken(loginUser);
-        return new ResponseEntity<>(jwt,HttpStatus.OK);
+        return ResponseEntity.ok().body(LoginResponse.buildResponse(jwt));
     }
 
     @GetMapping("/getUser")
