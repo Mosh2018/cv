@@ -3,3 +3,8 @@ export enum ApiResponse {
   EMPTY_JWT = 'EMPTY_JWT'
 
 }
+
+export enum Role {
+  ROLE_ADMIN = 'ROLE_ADMIN',
+  ROLE_USER = 'ROLE_USER'
+}

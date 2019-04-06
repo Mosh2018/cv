@@ -25,8 +25,6 @@ export class LoginComponent implements OnInit {
   }
 
   loginSubmit() {
-    console.log(this.loginFrom.value.username);
-    console.log(this.loginFrom.value.password);
     this.auth.callBackendForLogin(this.loginFrom.value).then(
       (user: User) => {
         if (user.status === ApiResponse.IT_IS_OK) {
