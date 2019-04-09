@@ -16,8 +16,6 @@ import static com.netum.cv.backend.modal.CustomStatus.IT_IS_OK;
 public class LoginResponse {
     private CustomStatus status;
     private String jwt;
-    private String firstName;
-    private String lastName;
 
     public static LoginResponse buildResponse(String jwt) {
         LoginResponse loginResponse = new LoginResponse();

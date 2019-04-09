@@ -48,7 +48,7 @@ public class UserService {
 
         CustomResponse result = signUpUserValidation.validateSignUp(requestUser);
 
-        if (result.getCustomStatus() == PASS_VALIDATION) {
+        if (result.getStatus() == PASS_VALIDATION) {
             User user = populateUser(requestUser);
             userRepository.save(user);
         }

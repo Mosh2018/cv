@@ -6,9 +6,11 @@ import {LoginComponent} from './components/login/login.component';
 import {AuthGuard} from './services/guard/auth-guard';
 import {AdminPageComponent} from './components/admin-page/admin-page.component';
 import {AdminGuard} from './services/guard/admin-guard';
+import {SignupComponent} from './components/signup/signup.component';
 
 const routes: Routes = [
   {path: '', component: StartPageComponent},
+  {path: 'sign-up', component: SignupComponent},
   {path: 'my-info', component: MyInfoComponent, canActivate: [AuthGuard]},
   {path: 'admin-page', component: AdminPageComponent, canActivate: [AuthGuard,  AdminGuard]},
   {path: 'login', component: LoginComponent},

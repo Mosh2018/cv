@@ -13,14 +13,14 @@ public class CustomResponse {
 
     private Long timeStamp;
     private String message;
-    private CustomStatus customStatus;
+    private CustomStatus status;
 
     public static CustomResponse build() {
         return new CustomResponse();
     }
     public static CustomResponse build(CustomStatus customStatus) {
         CustomResponse status =  new CustomResponse();
-        status.setCustomStatus(customStatus);
+        status.setStatus(customStatus);
         status.setTimeStamp(System.currentTimeMillis());
         status.setMessage(customStatus.getName());
         return status;

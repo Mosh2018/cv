@@ -13,10 +13,12 @@ export class HttpService {
   }
 
   private getAPI(controller: string) {
-    const API = 'http://localhost:8080/api/';
+    const API = 'http://localhost:8080/api/'; // this url can get from environment
     switch (controller) {
       case 'login':
         return API + ApiController.LOGIN;
+      case 'sign-up':
+        return API + ApiController.SIGN_UP;
       default:
         return '';
     }

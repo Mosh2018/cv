@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
         }
       }
     ).catch(err => {
-      this.auth.logout();
+     // this.auth.logout();
       this.isNotValid = true; });
   }
 }

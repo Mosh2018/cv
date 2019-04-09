@@ -1,0 +1,11 @@
+.navBarCustomClass {
+
+}
+.navBarCustomClass a {
+  cursor: pointer;
+}
+
+.navBarCustomClass h5 a{
+  cursor: pointer;
+  color: rgba(2, 11, 172, 0.41);
+}

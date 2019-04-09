@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {HttpService} from '../http.service';
-import {User} from '../../models/user';
+import {CustomError, SignUpData, User} from '../../models/user';
 import {ApiResponse} from '../../models/api.response';
 import {Router} from '@angular/router';
 
@@ -20,7 +20,7 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
-  callBackendForLogin(credential): Promise<Observable<User> | User> {
+  callBackendForLogin(credential): Promise<Observable<User> | User | any> {
     return this.http.save('login', credential).toPromise()
       .then((user: User) => {
         if (user && user.status === ApiResponse.IT_IS_OK) {
@@ -31,7 +31,19 @@ export class AuthenticationService {
       }).catch(error => {
         this.logout();
         this.currentUserSubject.next(null);
-        return new User(error.status, error.jwt);
+        return error;
+      });
+  }
+
+  callBackendForSignUp(signUpData): Promise<Observable<any> | any> {
+    return this.http.save('sign-up', signUpData).toPromise()
+      .then((signUp: SignUpData) => {
+        if (signUp && signUp.status === ApiResponse.IT_IS_OK) {
+            // do something
+          return signUp;
+        }
+      }).catch( error => {
+         return error;
       });
   }
 
@@ -39,7 +51,7 @@ export class AuthenticationService {
     console.log('logged out');
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
-    this.router.navigate(['/']);
+    // this.router.navigate(['/']);
   }
 }
 

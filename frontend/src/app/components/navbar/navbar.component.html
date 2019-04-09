@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light navBarCustomClass">
   <a  routerLink="/">
     <img src="../../../assets/images/cv_icon.png" alt="CV" width="70" height="70">
   </a>
@@ -6,7 +6,7 @@
           type="button"
           data-toggle="collapse"
           data-target="#navbarText"
-          aria-controls="navbarText" s
+          aria-controls="navbarText"
           aria-expanded="false"
           aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -25,12 +25,17 @@
       <li class="nav-item" *ngIf="isNotLogged()">
         <a class="nav-link" routerLink="/login">Login</a>
       </li>
-      <li class="nav-item" *ngIf="isLogged()" style="cursor: pointer" >
-        <a class="nav-link" (click)="auth.logout()">logout</a>
+      <li class="nav-item" *ngIf="isLogged()">
+        <a class="nav-link" (click)="logout()">logout</a>
       </li>
     </ul>
     <span class="navbar-text" *ngIf="isLogged()">
-      Welcome to CV {{getFirstName()}} {{getLastName()}}
+      <h3>{{getFirstName()}} {{getLastName()}}</h3>
+    </span>
+    <span class="navbar-text nav-item" *ngIf="!isLogged()">
+      <h5 class="nav-link">
+        <a routerLink="/sign-up">Sign Up</a>
+      </h5>
     </span>
   </div>
 </nav>

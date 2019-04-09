@@ -15,7 +15,7 @@ public class AppController {
 
     public ResponseEntity<CustomResponse> getEntityResponseAnswer(CustomResponse customResponse) {
 
-        if (customResponse.getCustomStatus().equals(PASS_VALIDATION)) {
+        if (customResponse.getStatus().equals(PASS_VALIDATION)) {
             return new ResponseEntity(CustomResponse.build(IT_IS_OK), HttpStatus.OK);
         }
         return new ResponseEntity<>(customResponse, HttpStatus.FORBIDDEN);

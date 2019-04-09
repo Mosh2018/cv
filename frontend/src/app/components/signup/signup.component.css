@@ -1,0 +1,11 @@
+.sig-up-logo {
+  margin: auto;
+  text-align: center;
+  box-sizing: border-box;
+  width: 250px;
+}
+.sign-up-form {
+  width: 90%;
+  max-width: 800px;
+  margin: 50px auto;
+}

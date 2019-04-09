@@ -3,17 +3,13 @@ package com.netum.cv.backend.validation;
 import com.netum.cv.backend.exceptions.UserNotValidException;
 import com.netum.cv.backend.modal.CustomStatus;
 import com.netum.cv.backend.modal.CvProfile;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.core.parameters.P;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -32,7 +28,7 @@ public class CvValidationTest extends TestBaseForValidation {
 
     @Test
     public void validateProfile() throws ParseException{
-        assertTrue(cvValidation.validateProfile(getCvProfile()).getCustomStatus().equals(CustomStatus.PASS_VALIDATION));
+        assertTrue(cvValidation.validateProfile(getCvProfile()).getStatus().equals(CustomStatus.PASS_VALIDATION));
 
     }
 
@@ -40,7 +36,7 @@ public class CvValidationTest extends TestBaseForValidation {
     public void birthdayCanNotBeInFuture() throws ParseException{
         this.birthday = getBirthday(1);
         try {
-            assertTrue(cvValidation.validateProfile(getCvProfile()).getCustomStatus().equals(CustomStatus.INVALID_DATE));
+            assertTrue(cvValidation.validateProfile(getCvProfile()).getStatus().equals(CustomStatus.INVALID_DATE));
             fail();
         } catch (UserNotValidException exc) {
             assertTrue(exc.status.equals(CustomStatus.INVALID_DATE));
@@ -51,7 +47,7 @@ public class CvValidationTest extends TestBaseForValidation {
     public void birthdayCanNotBeToday() throws ParseException {
         this.birthday = getBirthday(0);
         try {
-            assertTrue(cvValidation.validateProfile(getCvProfile()).getCustomStatus().equals(CustomStatus.INVALID_DATE));
+            assertTrue(cvValidation.validateProfile(getCvProfile()).getStatus().equals(CustomStatus.INVALID_DATE));
             fail();
         } catch (UserNotValidException exc) {
             assertTrue(exc.status.equals(CustomStatus.INVALID_DATE));
