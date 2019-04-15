@@ -48,6 +48,9 @@ public class TestBaseForService {
     protected UserRepository userRepository;
 
     @Mock
+    protected UserService userService;
+
+    @Mock
     protected AuthenticationManager authenticationManager;
 
     @Mock
@@ -65,9 +68,18 @@ public class TestBaseForService {
     }
 
     protected void mockAuthentication() {
+        AppUser appUser = createApplicationUserForTest();
         Authentication authenticationMock = mock(Authentication.class);
         when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(authenticationMock);
-        when(authenticationMock.getPrincipal()).thenReturn(createApplicationUserForTest());
+        when(authenticationMock.getPrincipal()).thenReturn(appUser);
+        when(userService.getUserEntity()).thenReturn(getUser());
+    }
+
+    private User getUser() {
+         User user = new User();
+         user.setFirstName("mina");
+         user.setLastName("olen");
+        return user;
     }
 
     protected void mockAddDateTimeService() {

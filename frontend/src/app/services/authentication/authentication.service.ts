@@ -47,6 +47,11 @@ export class AuthenticationService {
       });
   }
 
+  callBackendForInfo() {
+    return this.http.fetch('test').toPromise()
+      .then( x => console.log(x.toString())).catch( x => console.log('Error', x));
+  }
+
   logout() {
     console.log('logged out');
     localStorage.removeItem('currentUser');

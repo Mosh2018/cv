@@ -12,6 +12,10 @@ export class HttpService {
     return this.http.post(this.getAPI(controller), data);
   }
 
+  fetch(controller: string) {
+    return this.http.get(this.getAPI(controller));
+  }
+
   private getAPI(controller: string) {
     const API = 'http://localhost:8080/api/'; // this url can get from environment
     switch (controller) {
@@ -19,6 +23,10 @@ export class HttpService {
         return API + ApiController.LOGIN;
       case 'sign-up':
         return API + ApiController.SIGN_UP;
+      case 'get_profile':
+        return API + ApiController.PROFILE;
+      case  'test':
+        return API + ApiController.TEST;
       default:
         return '';
     }

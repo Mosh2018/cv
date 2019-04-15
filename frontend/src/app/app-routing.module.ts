@@ -7,6 +7,7 @@ import {AuthGuard} from './services/guard/auth-guard';
 import {AdminPageComponent} from './components/admin-page/admin-page.component';
 import {AdminGuard} from './services/guard/admin-guard';
 import {SignupComponent} from './components/signup/signup.component';
+import {JwtModule} from '@auth0/angular-jwt';
 
 const routes: Routes = [
   {path: '', component: StartPageComponent},
@@ -18,7 +19,18 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes),
+    JwtModule.forRoot({
+      config: {
+
+        tokenGetter: function tokenGetter() {
+          return localStorage.getItem('currentUser');
+        },
+        whitelistedDomains: ['localhost:8080'],
+        blacklistedRoutes: ['http://localhost:8080/api/']
+      }
+    })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

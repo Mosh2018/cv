@@ -1,13 +1,11 @@
 package com.netum.cv.backend.security;
 
-import com.netum.cv.backend.exceptions.UserNotValidException;
 import com.netum.cv.backend.service.ApplicationUserDetailService;
 import com.netum.cv.backend.service.JwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.netum.cv.backend.modal.CustomStatus.BAD_JWT;
 import static com.netum.cv.backend.validation.AppSetting.HEADER_STRING;
 import static com.netum.cv.backend.validation.AppSetting.TOKEN_PREFIX;
 

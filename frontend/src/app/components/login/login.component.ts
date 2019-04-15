@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
       (user: User) => {
         if (user.status === ApiResponse.IT_IS_OK) {
           this.isNotValid = false;
-          this.router.navigate(['/my-info']);
+          this.router.navigate(['/']);
         } else {
           this.isNotValid = true;
         }
