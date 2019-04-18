@@ -9,6 +9,9 @@
              id="firstNameId"
              class="form-control"
              placeholder="First name">
+      <div *ngIf="validator('firstName')">
+        {{errors('firstName').text}}
+      </div>
     </div>
     <div class="col">
       <input type="text"
@@ -54,8 +57,9 @@
   </div>
   <br/>
   <div class="form-group row">
-    <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary">Sign up</button>
+    <div class="col-sm-12">
+      <button type="submit" class="btn btn-outline-success" [disabled]="signUpForm.invalid" style="margin-right: 30px">Sign up</button>
+      <button type="button" class="btn btn-outline-danger" (click)="reset()">Reset</button>
     </div>
   </div>
   <hr>

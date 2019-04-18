@@ -1,32 +1,31 @@
 package com.netum.cv.backend.validation;
 
-import com.netum.cv.backend.exceptions.UserNotValidException;
+import com.netum.cv.backend.entity.AppBoolean;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.netum.cv.backend.modal.CustomStatus.*;
-
 public class UserValidationUtil {
 
 
-    public static boolean isValidStringValue(String value, int min, int max) {
+    public static AppBoolean isValidStringValue(String value, int min, int max) {
         if(value == null) {
-            throw new UserNotValidException(EMPTY);
+            return AppBoolean.build(false, "can't be null");
         }
         if (min > 0 && value.isEmpty()) {
-            throw new UserNotValidException(EMPTY);
+            return AppBoolean.build(false, "can't be empty");
         }
         if (value.length() < min) {
-            throw new UserNotValidException(SHORT_STRING);
+            return AppBoolean.build(false, "can't be shorter than " + min + " characters");
+
         }
         if (value.length() > max) {
-            throw new UserNotValidException(LONG_STRING);
-        }
+            return AppBoolean.build(false, "can't be more than " + max + " characters");
 
-        return true;
+        }
+        return AppBoolean.build(true, "");
     }
 
     public static int calculatePasswordStrength(String password) {
@@ -69,20 +68,23 @@ public class UserValidationUtil {
         return !matcher.find();
     }
 
-    public static boolean invalidatePhoneNumber(String phoneNumber) {
+    public static AppBoolean invalidatePhoneNumber(String phoneNumber) {
         String spaceRemovedString = phoneNumber.replace(" ", "");
         Matcher matcher = Pattern.compile("^\\d{7,16}$").matcher(spaceRemovedString);
-
-        return !matcher.find();
+        String ms = "";
+        if(!matcher.find()) {
+            ms = "the phone number is not valid";
+        }
+        return AppBoolean.build(matcher.find(), ms);
     }
 
-    public static boolean inValidBirthdayFormat(String birthday) {
+    public static AppBoolean inValidBirthdayFormat(String birthday) {
         String spaceRemovedString = birthday.replace(" ", "");
         Matcher matcher = Pattern.compile("^\\d{2}.\\d{2}.\\d{4}$").matcher(spaceRemovedString);
-
-        return !matcher.find();
+        String ms = "";
+        if (!matcher.find()) ms = "the birthday is not valid";
+        return AppBoolean.build(matcher.find(), ms);
     }
-
 
     public static Date getNowWithoutTime() {
         Calendar calendar = Calendar.getInstance();

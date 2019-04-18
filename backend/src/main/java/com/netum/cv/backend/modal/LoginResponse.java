@@ -5,25 +5,26 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
-import static com.netum.cv.backend.modal.CustomStatus.EMPTY_JWT;
-import static com.netum.cv.backend.modal.CustomStatus.IT_IS_OK;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.OK;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponse {
-    private CustomStatus status;
+    private HttpStatus status;
     private String jwt;
 
     public static LoginResponse buildResponse(String jwt) {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setJwt(jwt);
         if(UserValidationUtil.isEmptyString(jwt)){
-           loginResponse.setStatus(EMPTY_JWT);
+           loginResponse.setStatus(FORBIDDEN);
         } else {
-            loginResponse.setStatus(IT_IS_OK);
+            loginResponse.setStatus(OK);
         }
         return loginResponse;
     }

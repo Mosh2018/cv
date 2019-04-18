@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {AuthenticationService} from '../../services/authentication/authentication.service';
-import {SignUpData} from '../../models/user';
+import {SignUpData, Validation} from '../../models/user';
 import {ApiResponse} from '../../models/api.response';
 import {Router} from '@angular/router';
+import {forbiddenNameValidator} from '../../validators/nameValidator';
 
 @Component({
   selector: 'app-signup',
@@ -12,7 +13,7 @@ import {Router} from '@angular/router';
 })
 export class SignupComponent implements OnInit {
   signUpForm = this.fb.group({
-          firstName:  ['', Validators.required],
+          firstName:  ['', [Validators.required, forbiddenNameValidator]],
           lastName:  ['', Validators.required],
           username:  ['', Validators.required],
           email:  ['', Validators.required],
@@ -26,20 +27,37 @@ export class SignupComponent implements OnInit {
                private router: Router) {}
 
   ngOnInit() {
+    console.log(this.signUpForm.get('firstName').errors);
   }
 
+  validator(x: string): boolean {
+    return this.control(x).touched && this.control(x).invalid;
+  }
+
+  errors(x) {
+    return this.control(x).errors;
+  }
+  control(x: string) {
+    return this.signUpForm.controls[x];
+  }
   submit() {
     this.auth.callBackendForSignUp(this.signUpForm.value).then(
       (response: SignUpData) => {
         console.log(response);
-        if (response.status === ApiResponse.IT_IS_OK) {
+        if (response && response.status === ApiResponse.OK && response.validationResult.length === 0) {
           this.router.navigate(['/login']);
+        } else if (response && response.status === ApiResponse.OK && response.validationResult.length > 0) {
+          response.validationResult.forEach( (x: Validation) => console.log(x.message));
         }
-        if (response.status === ApiResponse.IT_IS_NOT_UNIQUE) {
+        if (response === undefined || !response || response.status !== ApiResponse.OK) {
           // do something
           this.router.navigate(['/']);
         }
       }
-   ).catch();
+   );
+  }
+
+  reset() {
+    this.signUpForm.reset();
   }
 }

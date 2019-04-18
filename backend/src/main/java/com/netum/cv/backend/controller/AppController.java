@@ -4,72 +4,34 @@ import com.netum.cv.backend.exceptions.JwtTokenException;
 import com.netum.cv.backend.exceptions.UseJPAException;
 import com.netum.cv.backend.exceptions.UserNotValidException;
 import com.netum.cv.backend.modal.CustomResponse;
+import com.netum.cv.backend.modal.ValidationResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.netum.cv.backend.modal.CustomStatus.IT_IS_OK;
-import static com.netum.cv.backend.modal.CustomStatus.PASS_VALIDATION;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AppController {
 
-    public ResponseEntity<CustomResponse> getEntityResponseAnswer(CustomResponse customResponse) {
-
-        if (customResponse.getStatus().equals(PASS_VALIDATION)) {
-            return new ResponseEntity(CustomResponse.build(IT_IS_OK), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(customResponse, HttpStatus.FORBIDDEN);
-    }
-
     @ExceptionHandler
     public ResponseEntity<CustomResponse> appExceptionHandler(UserNotValidException exception) {
-
-        switch (exception.status) {
-            case IT_IS_NOT_UNIQUE:
-                return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.IM_USED);
-            case SHORT_STRING:
-            case LONG_STRING:
-                return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.LENGTH_REQUIRED);
-            case EMPTY:
-                return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.NO_CONTENT);
-            case IT_IS_WEAK:
-            case BAD_EMAIL:
-                return  new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.SEE_OTHER);
-            case NOT_FOUND:
-                return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.FORBIDDEN);
-                default:
-                    return getEntityResponseAnswer(CustomResponse.build(exception.status));
-        }
+        return getCustomResponseResponseEntity(exception.message, exception.status);
     }
 
     @ExceptionHandler
     public ResponseEntity<CustomResponse> jwtExceptionHandler(JwtTokenException exception) {
-
-        switch (exception.status) {
-            case BAD_JWT:
-            case BAD_SIGNATURE:
-            case JWT_INVALID:
-            case JWT_TIME_EXPIRED:
-            case UNSUPPORTED_JWT:
-            case EMPTY_JWT:
-                return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.FORBIDDEN);
-
-            default:
-                return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.FORBIDDEN);
-        }
+        return getCustomResponseResponseEntity(exception.message, exception.status);
     }
 
     @ExceptionHandler
     public ResponseEntity<CustomResponse> userJpaExceptions(UseJPAException exception) {
+        return getCustomResponseResponseEntity(exception.message, exception.status);
+    }
 
-        switch (exception.status) {
-            case USER_NOT_SAVED:
-            case PROFILE_NOT_SAVED:
-                return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.EXPECTATION_FAILED);
-
-                default:
-                    return new ResponseEntity<>(CustomResponse.build(exception.status), HttpStatus.FORBIDDEN);
-
-        }
+    private ResponseEntity<CustomResponse> getCustomResponseResponseEntity(String message, HttpStatus status) {
+        List<ValidationResult> resultList = new ArrayList<>();
+        resultList.add(ValidationResult.build(message, status));
+        return new ResponseEntity(CustomResponse.build(status, resultList), HttpStatus.FORBIDDEN);
     }
 }

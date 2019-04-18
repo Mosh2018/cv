@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {HttpService} from '../http.service';
-import {CustomError, SignUpData, User} from '../../models/user';
+import {CustomResponse, SignUpData, User} from '../../models/user';
 import {ApiResponse} from '../../models/api.response';
 import {Router} from '@angular/router';
 
@@ -23,7 +23,7 @@ export class AuthenticationService {
   callBackendForLogin(credential): Promise<Observable<User> | User | any> {
     return this.http.save('login', credential).toPromise()
       .then((user: User) => {
-        if (user && user.status === ApiResponse.IT_IS_OK) {
+        if (user && user.status === ApiResponse.OK) {
           localStorage.setItem('currentUser', user.jwt);
           this.currentUserSubject.next(user.jwt);
           return user;
@@ -38,12 +38,13 @@ export class AuthenticationService {
   callBackendForSignUp(signUpData): Promise<Observable<any> | any> {
     return this.http.save('sign-up', signUpData).toPromise()
       .then((signUp: SignUpData) => {
-        if (signUp && signUp.status === ApiResponse.IT_IS_OK) {
-            // do something
+        if (signUp && signUp.status === ApiResponse.OK) {
+          console.log("auth_1");
           return signUp;
         }
       }).catch( error => {
-         return error;
+        console.log("auth_2");
+        return new CustomResponse(ApiResponse.IT_IS_NOT_UNIQUE);
       });
   }
 

@@ -10,19 +10,23 @@ export class User {
 export class SignUpData {
   status: string;
   message: string;
+  validationResult: any[];
   constructor(respons: string, message: string) {
     this.status = respons;
     this.message = message;
   }
 }
 
-export class CustomError {
+export class CustomResponse {
+  status: string;
+  timeStamp: number;
+  validationResult: Validation[];
+  constructor(status: string) {
+    this.status = status;
+  }
+}
+
+export class Validation {
   status: string;
   message: string;
-  timeStamp: number;
-  constructor(status: string, message: string, time: number) {
-    this.status = status;
-    this.message = message;
-    this.timeStamp = time;
-  }
 }

@@ -4,8 +4,8 @@ import com.netum.cv.backend.entity.Profile;
 import com.netum.cv.backend.entity.User;
 import com.netum.cv.backend.exceptions.UseJPAException;
 import com.netum.cv.backend.modal.CustomResponse;
-import com.netum.cv.backend.modal.CustomStatus;
 import com.netum.cv.backend.modal.CvProfile;
+import com.netum.cv.backend.modal.ValidationResult;
 import com.netum.cv.backend.repositories.ProfileRepository;
 import com.netum.cv.backend.repositories.UserRepository;
 import com.netum.cv.backend.validation.CvValidation;
@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class CvServices {
@@ -31,12 +31,13 @@ public class CvServices {
     @Autowired
     private CvValidation cvValidation;
 
-    public ResponseEntity<CustomResponse> AddOrUpdateProfile(CvProfile cvProfile) throws Exception {
-
-        if (CustomStatus.PASS_VALIDATION.equals(cvValidation.validateProfile(cvProfile))) {
+    public CustomResponse AddOrUpdateProfile(CvProfile cvProfile) throws Exception {
+        List<ValidationResult> results = cvValidation.validateProfile(cvProfile);
+        if (results.isEmpty()) {
             saveProfile(cvProfile);
+            return CustomResponse.build(HttpStatus.OK, results);
         }
-        return ResponseEntity.ok(CustomResponse.build(CustomStatus.IT_IS_OK));
+        return CustomResponse.build(HttpStatus.NO_CONTENT, results);
     }
 
     private void saveProfile(CvProfile cvProfile) {
@@ -49,14 +50,13 @@ public class CvServices {
                 user.setProfile(savedProfile);
                 userRepository.save(user);
             } catch (Exception exc) {
-                CustomStatus.USER_NOT_SAVED.setCustomStatusAMessage(exc.getMessage());
-                throw new UseJPAException(CustomStatus.USER_NOT_SAVED);
+                throw new UseJPAException(HttpStatus.EXPECTATION_FAILED, "the user did't saved");
             }
         } else {
             try {
                 updateProfile(user.getProfile() , cvProfile);
             } catch (Exception exc) {
-                throw new UseJPAException(CustomStatus.PROFILE_NOT_SAVED);
+                throw new UseJPAException(HttpStatus.EXPECTATION_FAILED, "the profile did't saved");
             }
         }
     }
@@ -72,13 +72,12 @@ public class CvServices {
         return profileRepository.save(profile);
     }
     public ResponseEntity<CvProfile> getProfile() {
-
         User user = userService.getUserEntity();
         if (user != null && user.getProfile() != null) {
             return new ResponseEntity(CvProfile.createCvProfile(user.getProfile()), HttpStatus.OK);
         } else {
-            if (user == null) throw new UseJPAException(CustomStatus.JWT_INVALID);
-            else throw new UseJPAException(CustomStatus.PROFILE_NOT_SAVED);
+            if (user == null) throw new UseJPAException(HttpStatus.FORBIDDEN, "the token is not valid");
+            else throw new UseJPAException(HttpStatus.EXPECTATION_FAILED, "the user can't get from the server");
         }
 
     }

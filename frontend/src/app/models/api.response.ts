@@ -1,5 +1,5 @@
 export enum ApiResponse {
-  IT_IS_OK = 'IT_IS_OK',
+  OK = 'OK',
   EMPTY_JWT = 'EMPTY_JWT',
   IT_IS_NOT_UNIQUE = 'IT_IS_NOT_UNIQUE'
 

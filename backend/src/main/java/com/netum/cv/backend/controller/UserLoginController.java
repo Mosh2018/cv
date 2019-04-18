@@ -23,8 +23,8 @@ public class UserLoginController extends AppController{
     private UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<CustomResponse> userSignUp(@Valid @RequestBody RequestUser requestUser){
-        return getEntityResponseAnswer(userService.saveUser(requestUser));
+    public CustomResponse userSignUp(@Valid @RequestBody RequestUser requestUser){
+        return userService.saveUser(requestUser);
     }
 
     @PostMapping("/userLogin")

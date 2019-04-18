@@ -1,9 +1,9 @@
 package com.netum.cv.backend.validation;
 
-import com.netum.cv.backend.exceptions.UserNotValidException;
-import com.netum.cv.backend.modal.CustomStatus;
 import com.netum.cv.backend.modal.CvProfile;
+import com.netum.cv.backend.modal.ValidationResult;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -11,8 +11,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class CvValidationTest extends TestBaseForValidation {
 
@@ -28,31 +29,30 @@ public class CvValidationTest extends TestBaseForValidation {
 
     @Test
     public void validateProfile() throws ParseException{
-        assertTrue(cvValidation.validateProfile(getCvProfile()).getStatus().equals(CustomStatus.PASS_VALIDATION));
+
+        List<ValidationResult> results = cvValidation.validateProfile(getCvProfile());
+        assertEquals(0, results.size());
 
     }
 
     @Test
     public void birthdayCanNotBeInFuture() throws ParseException{
         this.birthday = getBirthday(1);
-        try {
-            assertTrue(cvValidation.validateProfile(getCvProfile()).getStatus().equals(CustomStatus.INVALID_DATE));
-            fail();
-        } catch (UserNotValidException exc) {
-            assertTrue(exc.status.equals(CustomStatus.INVALID_DATE));
-        }
+        List<ValidationResult> results;
+        results = cvValidation.validateProfile(getCvProfile());
+        assertEquals(1, results.size());
+        assertEquals("birthday can not be in future", results.get(0).getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, results.get(0).getCustomStatus());
     }
-
     @Test
     public void birthdayCanNotBeToday() throws ParseException {
         this.birthday = getBirthday(0);
-        try {
-            assertTrue(cvValidation.validateProfile(getCvProfile()).getStatus().equals(CustomStatus.INVALID_DATE));
-            fail();
-        } catch (UserNotValidException exc) {
-            assertTrue(exc.status.equals(CustomStatus.INVALID_DATE));
+        List<ValidationResult> results;
+        results = cvValidation.validateProfile(getCvProfile());
+        assertEquals(1, results.size());
+        assertEquals("birthday can not be in future", results.get(0).getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, results.get(0).getCustomStatus());
         }
-    }
 
     private String getBirthday(int years) throws ParseException {
         final String DATE_FORMAT = "dd.MM.yyyy";

@@ -4,7 +4,6 @@ import com.netum.cv.backend.controller.AppController;
 import com.netum.cv.backend.entity.User;
 import com.netum.cv.backend.exceptions.JwtTokenException;
 import com.netum.cv.backend.modal.AppUser;
-import com.netum.cv.backend.modal.CustomStatus;
 import com.netum.cv.backend.modal.LoginUser;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +19,7 @@ import java.util.Date;
 import java.util.Random;
 
 import static com.netum.cv.backend.validation.AppSetting.*;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @Service
 @Slf4j
@@ -102,17 +102,17 @@ public class JwtTokenService extends AppController {
         try {
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(authToken);
         } catch (SignatureException ex) {
-            throw new JwtTokenException(CustomStatus.BAD_SIGNATURE);
+            throw new JwtTokenException(FORBIDDEN, "the signature not valid");
         } catch (MalformedJwtException ex) {
-            throw new JwtTokenException(CustomStatus.JWT_INVALID);
+            throw new JwtTokenException(FORBIDDEN, "the token is corrupted");
         } catch (ExpiredJwtException ex) {
-            throw new JwtTokenException(CustomStatus.JWT_TIME_EXPIRED);
+            throw new JwtTokenException(FORBIDDEN, "the token has been expired login again");
         } catch (UnsupportedJwtException ex) {
-            throw new JwtTokenException(CustomStatus.UNSUPPORTED_JWT);
+            throw new JwtTokenException(FORBIDDEN, "the token is not valid");
         } catch (IllegalArgumentException ex) {
-            throw new JwtTokenException(CustomStatus.EMPTY_JWT);
+            throw new JwtTokenException(FORBIDDEN, "the token is empty login please");
         } catch (RuntimeException e) {
-            throw new JwtTokenException(CustomStatus.BAD_JWT);
+            throw new JwtTokenException(FORBIDDEN, " unknown error");
         }
     }
 

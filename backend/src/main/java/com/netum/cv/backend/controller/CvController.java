@@ -1,5 +1,6 @@
 package com.netum.cv.backend.controller;
 
+import com.netum.cv.backend.modal.CustomResponse;
 import com.netum.cv.backend.modal.CvProfile;
 import com.netum.cv.backend.service.CvServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,8 @@ public class CvController extends AppController {
 
     @PostMapping("/add_profile")
     public ResponseEntity<?> addProfile(@Valid @RequestBody CvProfile cvProfile) throws Exception{
-       return cvServices.AddOrUpdateProfile(cvProfile);
+        CustomResponse response = cvServices.AddOrUpdateProfile(cvProfile);
+       return new ResponseEntity(response, response.getStatus());
     }
 
     @GetMapping("/get_profile")

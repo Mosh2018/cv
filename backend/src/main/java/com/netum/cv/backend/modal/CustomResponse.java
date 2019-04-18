@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,17 +15,14 @@ import lombok.Setter;
 public class CustomResponse {
 
     private Long timeStamp;
-    private String message;
-    private CustomStatus status;
+    private HttpStatus status;
+    private List<ValidationResult> validationResult;
 
-    public static CustomResponse build() {
-        return new CustomResponse();
-    }
-    public static CustomResponse build(CustomStatus customStatus) {
+    public static CustomResponse build(HttpStatus httpStatus, List<ValidationResult> resultList) {
         CustomResponse status =  new CustomResponse();
-        status.setStatus(customStatus);
+        status.setStatus(httpStatus);
         status.setTimeStamp(System.currentTimeMillis());
-        status.setMessage(customStatus.getName());
+        status.setValidationResult(resultList);
         return status;
     }
 }

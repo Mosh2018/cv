@@ -1,12 +1,14 @@
 package com.netum.cv.backend.exceptions;
 
-import com.netum.cv.backend.modal.CustomStatus;
+import org.springframework.http.HttpStatus;
 
 public class UserNotValidException extends RuntimeException {
 
-    public CustomStatus status;
-    public UserNotValidException(CustomStatus status) {
-        super(status.getName());
+    public HttpStatus status;
+    public String message;
+    public UserNotValidException(HttpStatus status, String message) {
+        super(message);
+        this.message = message;
         this.status = status;
     }
 }

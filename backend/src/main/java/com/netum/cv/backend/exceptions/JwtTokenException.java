@@ -1,12 +1,14 @@
 package com.netum.cv.backend.exceptions;
 
-import com.netum.cv.backend.modal.CustomStatus;
+import org.springframework.http.HttpStatus;
 
 public class JwtTokenException extends RuntimeException {
 
-    public CustomStatus status;
-    public JwtTokenException(CustomStatus status) {
-        super(status.getName());
+    public HttpStatus status;
+    public String message;
+    public JwtTokenException(HttpStatus status, String message) {
+        super(message);
         this.status = status;
+        this.message = message;
     }
 }

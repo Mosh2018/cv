@@ -28,7 +28,7 @@ public class UserValidationUtilTestForValidation extends TestBaseForValidation {
         assertEquals(10, UserValidationUtil.calculatePasswordStrength(strPasswords[16]));
 
     }
-
+/*
     @Test
     public void invalidEmail() {
         assertFalse(UserValidationUtil.invalidEmail(emails[0]));
@@ -67,4 +67,5 @@ public class UserValidationUtilTestForValidation extends TestBaseForValidation {
     public void isInvalidBirthday() {
         assertTrue(UserValidationUtil.inValidBirthdayFormat(invalidBirthdays[0]));
     }
+    */
 }

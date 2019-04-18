@@ -1,12 +1,14 @@
 package com.netum.cv.backend.exceptions;
 
-import com.netum.cv.backend.modal.CustomStatus;
+import org.springframework.http.HttpStatus;
 
 public class UseJPAException extends RuntimeException {
 
-    public CustomStatus status;
-    public UseJPAException(CustomStatus status) {
-        super(status.getName());
+    public HttpStatus status;
+    public String message;
+    public UseJPAException(HttpStatus status, String message) {
+        super(message);
         this.status = status;
+        this.message = message;
     }
 }

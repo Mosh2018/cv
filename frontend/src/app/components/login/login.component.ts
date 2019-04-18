@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
   loginSubmit() {
     this.auth.callBackendForLogin(this.loginFrom.value).then(
       (user: User) => {
-        if (user.status === ApiResponse.IT_IS_OK) {
+        if (user.status === ApiResponse.OK) {
           this.isNotValid = false;
           this.router.navigate(['/']);
         } else {

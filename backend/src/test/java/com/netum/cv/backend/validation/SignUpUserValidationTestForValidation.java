@@ -1,9 +1,14 @@
 package com.netum.cv.backend.validation;
 
 import com.netum.cv.backend.exceptions.UserNotValidException;
-import com.netum.cv.backend.modal.CustomStatus;
 import com.netum.cv.backend.modal.RequestUser;
+import com.netum.cv.backend.modal.ValidationResult;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
+
+import javax.xml.bind.ValidationEvent;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -14,159 +19,125 @@ import static org.mockito.Mockito.when;
 public class SignUpUserValidationTestForValidation extends TestBaseForValidation {
 
     @Test
-    public void throwExceptionsIfUsernameIsEmpty() {
+    public void returnNotEmptyValidationResultsIfUsernameIsEmpty() {
         RequestUser requestUser = getRequestUser("",
                 null, null, null, null);
-        try {
-            signUpUserValidation.validateSignUp(requestUser);
-            fail();
-        } catch (UserNotValidException e) {
-            assertEquals(CustomStatus.EMPTY, e.status);
-        }
+        List<ValidationResult> results = signUpUserValidation.validateSignUp(requestUser);
+        assertEquals(1, results.size());
+        assertEquals("username can't be empty", results.get(0).getMessage());
+        assertEquals(HttpStatus.NO_CONTENT, results.get(0).getCustomStatus());
+
     }
 
     @Test
-    public void throwExceptionsIfUsernameLess6Characters() {
+    public void returnValidationsResultWithOneValidationIfUsernameLess6Characters() {
         RequestUser requestUser = getRequestUser("qwert",
                 null, null, null, null);
-        try {
-            signUpUserValidation.validateSignUp(requestUser);
-            fail();
-        } catch (UserNotValidException e) {
-            assertEquals(CustomStatus.SHORT_STRING, e.status);
-        }
+        List<ValidationResult> results = signUpUserValidation.validateSignUp(requestUser);
+        assertEquals(1, results.size());
+        assertEquals("username can't be shorter than 6 characters", results.get(0).getMessage());
+        assertEquals(HttpStatus.NO_CONTENT, results.get(0).getCustomStatus());
     }
 
     @Test
-    public void throwExceptionIfUserNameOver20Characters(){
+    public void returnValidationsResultWithOneValidationIfUserNameOver20Characters(){
+
         RequestUser requestUser = getRequestUser("thisMostBeStringOverTwentyCharactersLong",
                 null, null, null, null);
-        try {
-            signUpUserValidation.validateSignUp(requestUser);
-            fail();
-        } catch (UserNotValidException e) {
-            assertEquals(CustomStatus.LONG_STRING, e.status);
-        }
+        List<ValidationResult> results = signUpUserValidation.validateSignUp(requestUser);
+        assertEquals(1, results.size());
+        assertEquals("username can't be more than 20 characters", results.get(0).getMessage());
+        assertEquals(HttpStatus.NO_CONTENT, results.get(0).getCustomStatus());
     }
 
     @Test
-    public void throwExceptionIfUsernameExistInDataBase() {
+    public void returnValidationsResultWithOneValidationIfUsernameExistInDataBase() {
         RequestUser requestUser = getRequestUser("Mohamid",
                 null, null, null, null);
         when(userRepository.existsByUsername(anyString())).thenReturn(true);
-
-        try {
-            signUpUserValidation.validateSignUp(requestUser);
-            fail();
-        } catch (UserNotValidException e) {
-            assertEquals(CustomStatus.IT_IS_NOT_UNIQUE, e.status);
-        }
+        List<ValidationResult> results = signUpUserValidation.validateSignUp(requestUser);
+        assertEquals(1, results.size());
+        assertEquals("username has already been taken", results.get(0).getMessage());
+        assertEquals(HttpStatus.IM_USED, results.get(0).getCustomStatus());
     }
 
     @Test
-    public void throwExceptionsIfFirstNameLess2Characters() {
+    public void returnValidationsResultWithOneValidationIfFirstNameLess2Characters() {
         RequestUser requestUser = getRequestUser(null,
                 "w", null, null, null);
-        try {
-            signUpUserValidation.validateSignUp(requestUser);
-            fail();
-        } catch (UserNotValidException e) {
-            assertEquals(CustomStatus.SHORT_STRING, e.status);
-        }
+        List<ValidationResult> results = signUpUserValidation.validateSignUp(requestUser);
+        assertEquals(1, results.size());
+        assertEquals("first name can't be shorter than 2 characters", results.get(0).getMessage());
+        assertEquals(HttpStatus.NO_CONTENT, results.get(0).getCustomStatus());
     }
 
     @Test
-    public void noExceptionsIfLastNameEmptyCharacters() {
+    public void returnEmptyValidationResultIfLastNameEmpty() {
         RequestUser requestUser = getRequestUser(null,
                 null, "", null, null);
-        when(userRepository.existsByUsername(anyString())).thenReturn(false);
-        try {
-            signUpUserValidation.validateSignUp(requestUser);
-
-        } catch (UserNotValidException e) {
-            fail();
-            assertEquals(CustomStatus.EMPTY, e.status);
-        }
+        List<ValidationResult> results = signUpUserValidation.validateSignUp(requestUser);
+        assertEquals(0, results.size());
     }
 
     @Test
-    public void throwExceptionIfPasswordIsWeak() {
+    public void returnValidationWithOneIfPasswordIsWeak() {
         RequestUser requestUser = getRequestUser(null,
                 null, null, null, "123456");
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
-        try {
-            signUpUserValidation.validateSignUp(requestUser);
-            fail();
-        } catch (UserNotValidException e) {
-            assertEquals(CustomStatus.IT_IS_WEAK, e.status);
-        }
+        List<ValidationResult> results = signUpUserValidation.validateSignUp(requestUser);
+        assertEquals(1, results.size());
+        assertEquals("password is too weak", results.get(0).getMessage());
+        assertEquals(HttpStatus.SEE_OTHER, results.get(0).getCustomStatus());
     }
 
     @Test
-    public void noExceptionIfPasswordIsNotWeak() {
+    public void returnEmptyValidationResultIfPasswordIsNotWeak() {
         RequestUser requestUser = getRequestUser(null,
                 null, null, null, strPasswords[2]);
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
-        try {
-            signUpUserValidation.validateSignUp(requestUser);
-
-        } catch (UserNotValidException e) {
-            fail();
-            assertEquals(CustomStatus.IT_IS_WEAK, e.status);
-        }
+        List<ValidationResult> results = signUpUserValidation.validateSignUp(requestUser);
+        assertEquals(0, results.size());
     }
 
     @Test
-    public void throwExceptionIfPasswordIsShort() {
+    public void returnValidationWithOneIfPasswordIsShort() {
         RequestUser requestUser = getRequestUser(null,
                 null, null, null, strPasswords[5]);
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
-        try {
-            signUpUserValidation.validateSignUp(requestUser);
-            fail();
-        } catch (UserNotValidException e) {
-
-            assertEquals(CustomStatus.SHORT_STRING, e.status);
-        }
+        List<ValidationResult> results = signUpUserValidation.validateSignUp(requestUser);
+        assertEquals(1, results.size());
+        assertEquals("password can't be shorter than 4 characters", results.get(0).getMessage());
+        assertEquals(HttpStatus.NO_CONTENT, results.get(0).getCustomStatus());
     }
 
     @Test
-    public void throwExceptionIfEmailLogicallyShort() {
+    public void returnValidationWithOneIfEmailLogicallyShort() {
         RequestUser requestUser = getRequestUser(null,
                 null, null, emails[0],null);
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
-        try {
-            signUpUserValidation.validateSignUp(requestUser);
-            fail();
-        } catch (UserNotValidException e) {
-            assertEquals(CustomStatus.SHORT_STRING, e.status);
-        }
+        List<ValidationResult> results = signUpUserValidation.validateSignUp(requestUser);
+        assertEquals(1, results.size());
+        assertEquals("email can't be shorter than 8 characters", results.get(0).getMessage());
+        assertEquals(HttpStatus.NO_CONTENT, results.get(0).getCustomStatus());
     }
 
     @Test
-    public void throwExceptionIfEmailNotValid() {
+    public void returnValidationWithOneIfEmailNotValid() {
         RequestUser requestUser = getRequestUser(null,
                 null, null, emails[1],null);
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
-        try {
-            signUpUserValidation.validateSignUp(requestUser);
-            fail();
-        } catch (UserNotValidException e) {
-            assertEquals(CustomStatus.BAD_EMAIL, e.status);
-        }
+        List<ValidationResult> results = signUpUserValidation.validateSignUp(requestUser);
+        assertEquals(1, results.size());
+        assertEquals("email is not valid", results.get(0).getMessage());
+        assertEquals(HttpStatus.SEE_OTHER, results.get(0).getCustomStatus());
     }
 
     @Test
-    public void noExceptionIfEmailIsValid() {
+    public void returnEmptyValidationResultIfEmailIsValid() {
         RequestUser requestUser = getRequestUser(null,
                 null, null, emails[3],null);
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
-        try {
-            signUpUserValidation.validateSignUp(requestUser);
-        } catch (UserNotValidException e) {
-            fail();
-            assertEquals(CustomStatus.BAD_EMAIL, e.status);
-        }
+        List<ValidationResult> results = signUpUserValidation.validateSignUp(requestUser);
+        assertEquals(0, results.size());
     }
-
 }
